@@ -190,14 +190,6 @@
         },
 
         show: function() {
-            /*
-            var rtePosition = $(this.editor.getContainer()).offset(),
-                toolbarPosition = $(this.editor.getContainer()).find(".mceToolbar").first(),
-                nodePosition = $(this.editor.dom.select('span#autocomplete')).position(),
-                top = rtePosition.top + toolbarPosition.innerHeight() + nodePosition.top + $(this.editor.selection.getNode()).innerHeight() - $(this.editor.getDoc()).scrollTop() + 5,
-                left = rtePosition.left + nodePosition.left;
-            */
-
             var rtePosition = $(this.editor.getContainer()).offset(),
                 contentAreaPosition = $(this.editor.getContentAreaContainer()).position(),
                 nodePosition = $(this.editor.dom.select('span#autocomplete')).position(),
