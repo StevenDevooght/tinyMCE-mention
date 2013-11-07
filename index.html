@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="http://cognistreamer.github.io/tinyMCE-mention/stylesheets/autocomplete.css">
+<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<style>
+#rte-container {
+	width: 800px;
+	height: 364px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -182px 0 0 -400px;
+}
+</style>
+<script>
+        tinymce.init({
+			selector: 'textarea',
+			height: 300,
+			theme: 'modern',
+			statusbar: false,
+			external_plugins: {
+				'mention' : 'http://cognistreamer.github.io/tinyMCE-mention/javascripts/tinymce/plugins/mention/plugin.js'
+			},
+			skin_url: 'http://cognistreamer.github.io/tinyMCE-mention/stylesheets/tinymce/skins/light',
+			mentions: {
+				source: [
+					{ name: 'Tyra Porcelli' }, 
+					{ name: 'Brigid Reddish' },
+					{ name: 'Ashely Buckler' },
+					{ name: 'Teddy Whelan' }
+				]
+			}
+		});
+</script>
+</head>
+<body>
+	<a href="https://github.com/CogniStreamer/tinyMCE-mention/"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+	<div id="rte-container">
+		<textarea></textarea>
+	</div>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+</body>
+</html>
