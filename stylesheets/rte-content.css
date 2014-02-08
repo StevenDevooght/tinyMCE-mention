@@ -1,3 +1,17 @@
+body {
+    font-size: 14px;
+}
+
 span#autocomplete {
-    font-weight: bold;
+	background-color: #eee;
+	border: solid 1px #ddd;
+}
+
+span#autocomplete #autocomplete-delimiter {
+	background-color: #ddd;
+	padding: 0 2px;
+}
+
+span#autocomplete #autocomplete-searchtext {
+	padding: 0 4px 0 2px;
 }
