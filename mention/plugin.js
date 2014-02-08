@@ -158,9 +158,10 @@
             this.query = $.trim($(this.editor.getBody()).find("#autocomplete-searchtext").text()).replace('\ufeff', '');
 
             clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout($.proxy(function() {
-                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this)) : this.options.source;
-                if(items) {
+            this.searchTimeout = setTimeout($.proxy(function () {
+                // Added delimiter parameter as last argument for backwards compatibility.
+                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this), this.options.delimiter) : this.options.source;
+                if (items) {
                     this.process(items);
                 }
             }, this), this.options.delay);
@@ -325,7 +326,9 @@
             var autoComplete,
                 autoCompleteData = ed.getParam('mentions');
 
-            autoCompleteData.delimiter = autoCompleteData.delimiter || '@';
+            // If the delimiter is undefined set default value to ['@'].
+            // If the delimiter is a string value convert it to an array. (backwards compatibility)
+            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !$.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
 
             function prevCharIsSpace() {
                 var $node = $(ed.selection.getNode().outerHTML),
@@ -335,11 +338,13 @@
                 return (!!$.trim(charachter).length) ? false : true;
             }
 
-            ed.on('keypress', function(e) {
-                if (String.fromCharCode(e.which || e.keyCode) === autoCompleteData.delimiter && prevCharIsSpace()) {
-                    if(autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
+            ed.on('keypress', function (e) {
+                var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
+                if (delimiterIndex > -1 && prevCharIsSpace()) {
+                    if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
-                        autoComplete = new AutoComplete(ed, autoCompleteData);
+                        // Clone options object and set the used delimiter.
+                        autoComplete = new AutoComplete(ed, $.extend({}, autoCompleteData, { delimiter: autoCompleteData.delimiter[delimiterIndex] }));
                     }
                 }
             });
