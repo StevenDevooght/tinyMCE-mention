@@ -62,11 +62,14 @@ source: [
 ####function
 
 ```javascript
-source: function(query, process) {
-    //Do your ajax call
-    $.getJSON('ajax/test.json', function(data) {
-        //call process to show the result
-        process(data)
+source: function (query, process, delimiter) {
+    // Do your ajax call
+    // When using multiple delimiters you can alter the query depending on the delimiter used
+    if (delimiter === '@') {
+       $.getJSON('ajax/users.json', function (data) {
+          //call process to show the result
+          process(data)
+       }
     }
 }
 ```
@@ -79,7 +82,19 @@ The name of the property used to do the lookup in the `source`.
 
 ###delimiter
 
-Character that will trigger the mention plugin.
+Character that will trigger the mention plugin. Can be configured as a character or an array of characters.
+
+####character
+
+```javascript
+delimiter: '@'
+```
+
+####array
+
+```javascript
+delimiter: ['@', '#']
+```
 
 **Default**: `'@'`.
 
