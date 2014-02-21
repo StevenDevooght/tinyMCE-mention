@@ -157,6 +157,10 @@
         lookup: function () {
             this.query = $.trim($(this.editor.getBody()).find("#autocomplete-searchtext").text()).replace('\ufeff', '');
 
+            if (this.$dropdown === undefined) {
+                this.show();
+            }
+
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout($.proxy(function () {
                 // Added delimiter parameter as last argument for backwards compatibility.
@@ -216,10 +220,6 @@
                 return;
             }
 
-            if (this.$dropdown === undefined) {
-                this.show();
-            }
-
             var _this = this,
                 result = [],
                 items = $.grep(data, function (item) {
@@ -250,7 +250,7 @@
         },
 
         renderDropdown: function () {
-            return '<ul class="rte-autocomplete dropdown-menu"></ul>';
+            return '<ul class="rte-autocomplete dropdown-menu"><li class="loading"></li></ul>';
         },
 
         render: function (item) {
