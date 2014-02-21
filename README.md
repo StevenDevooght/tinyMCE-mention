@@ -173,6 +173,15 @@ renderDropdown: function() {
 }
 ```
 
+###loadingUrl
+
+If this image URL is set, the dropdown will render immediately and display the image to inform the user resources are loading. To be used most likely when source is remote. 
+
+```javascript
+    loadingUrl: 'http://www.mysite.com/images/ui-anim_basic_16x16.gif',
+```
+
+
 ##License
 
 MIT licensed
