@@ -185,5 +185,3 @@ If this image URL is set, the dropdown will render immediately and display the i
 ##License
 
 MIT licensed
-
-Copyright (C) 2013 Cognistreamer, [http://cognistreamer.com](http://cognistreamer.com)
