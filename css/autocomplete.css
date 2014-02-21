@@ -4,7 +4,6 @@
     left: 0px;
     display: block;
     z-index: 1000;
-    display: none;
     float: left;
     min-width: 160px;
     padding: 5px 0;
@@ -47,6 +46,11 @@
     position: absolute;
     top: -6px;
     left: 10px;
+}
+
+.rte-autocomplete > li.loading {
+	background: url("http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/1-0.gif") center no-repeat;
+	height: 16px;
 }
 
 .rte-autocomplete > li > a {
