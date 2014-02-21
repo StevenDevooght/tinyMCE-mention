@@ -1,9 +1,7 @@
-/*global tinymce, jQuery */
-
 ;(function (tinymce, $) {
     'use strict';
 
-    var AutoComplete = function (ed, options) {
+    var AutoComplete = function(ed, options) {
         this.editor = ed;
 
         this.options = $.extend({}, {
@@ -28,10 +26,10 @@
     };
 
     AutoComplete.prototype = {
-
+        
         constructor: AutoComplete,
 
-        renderInput: function () {
+        renderInput: function() {
             var rawHtml =  '<span id="autocomplete">' +
                                 '<span id="autocomplete-delimiter">' + this.options.delimiter + '</span>' +
                                 '<span id="autocomplete-searchtext"><span class="dummy">\uFEFF</span></span>' +
@@ -43,20 +41,20 @@
             this.editor.selection.collapse(0);
         },
 
-        bindEvents: function () {
+        bindEvents: function() {
             this.editor.on('keyup', this.editorKeyUpProxy = $.proxy(this.rteKeyUp, this));
             this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this));
             this.editor.on('click', this.editorClickProxy = $.proxy(this.rteClicked, this));
-
+        
             //keydown event has to be called first.
-            var keyDownEvent = this.editor.__bindings.keydown.pop();
-            this.editor.__bindings.keydown.unshift(keyDownEvent);
+            var keyDownEvent = this.editor.__bindings['keydown'].pop();
+            this.editor.__bindings['keydown'].unshift(keyDownEvent);
 
-            $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function () { this.cleanUp(true); }, this));
+            $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function(){ this.cleanUp(true); }, this));
             $('body').on('click', this.bodyClickProxy = $.proxy(this.rteLostFocus, this));
         },
 
-        unbindEvents: function () {
+        unbindEvents: function() {
             this.editor.off('keyup', this.editorKeyUpProxy);
             this.editor.off('keydown', this.editorKeyDownProxy);
             this.editor.on('click', this.editorClickProxy);
@@ -64,8 +62,8 @@
             $('body').off('click', this.bodyClickProxy);
         },
 
-        rteKeyUp: function (e) {
-            switch (e.which || e.keyCode) {
+        rteKeyUp: function(e) {
+            switch(e.which || e.keyCode) {
             //DOWN ARROW
             case 40:
             //UP ARROW
@@ -110,7 +108,7 @@
             }
         },
 
-        rteKeyDown: function (e) {
+        rteKeyDown: function(e) {
             switch (e.which || e.keyCode) {
              //TAB
             case 9:
@@ -124,14 +122,14 @@
             //UP ARROW
             case 38:
                 e.preventDefault();
-                if (this.$dropdown !== undefined) {
+                if(this.$dropdown !== undefined) {
                     this.highlightPreviousResult();
                 }
                 break;
             //DOWN ARROW
             case 40:
                 e.preventDefault();
-                if (this.$dropdown !== undefined) {
+                if(this.$dropdown !== undefined) {
                     this.highlightNextResult();
                 }
                 break;
@@ -148,26 +146,28 @@
             }
         },
 
-        rteLostFocus: function (ed, e) {
+         rteLostFocus: function (ed, e) {
             if (this.hasFocus) {
                 this.cleanUp(true);
             }
         },
 
-        lookup: function () {
+        lookup: function() {
+        	 if (this.$dropdown === undefined && this.options.loadingUrl) {
+                this.show();
+            }
             this.query = $.trim($(this.editor.getBody()).find("#autocomplete-searchtext").text()).replace('\ufeff', '');
 
             clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout($.proxy(function () {
-                // Added delimiter parameter as last argument for backwards compatibility.
-                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this), this.options.delimiter) : this.options.source;
-                if (items) {
+            this.searchTimeout = setTimeout($.proxy(function() {
+                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this)) : this.options.source;
+                if(items) {
                     this.process(items);
                 }
             }, this), this.options.delay);
         },
 
-        matcher: function (item) {
+        matcher: function(item) {
             return ~item[this.options.queryBy].toLowerCase().indexOf(this.query.toLowerCase());
         },
 
@@ -178,25 +178,21 @@
                 item;
 
             while ((item = items.shift()) !== undefined) {
-                if (!item[this.options.queryBy].toLowerCase().indexOf(this.query.toLowerCase())) {
-                    beginswith.push(item);
-                } else if (~item[this.options.queryBy].indexOf(this.query)) {
-                    caseSensitive.push(item);
-                } else {
-                    caseInsensitive.push(item);
-                }
+                if (!item[this.options.queryBy].toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+                else if (~item[this.options.queryBy].indexOf(this.query)) caseSensitive.push(item);
+                else caseInsensitive.push(item);
             }
 
             return beginswith.concat(caseSensitive, caseInsensitive);
         },
 
-        highlighter: function (text) {
+        highlighter: function(text) {
             return text.replace(new RegExp('(' + this.query + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
             });
         },
 
-        show: function () {
+        show: function() {
             var rtePosition = $(this.editor.getContainer()).offset(),
                 contentAreaPosition = $(this.editor.getContentAreaContainer()).position(),
                 nodePosition = $(this.editor.dom.select('span#autocomplete')).position(),
@@ -211,8 +207,8 @@
             this.$dropdown.on('click', $.proxy(this.autoCompleteClick, this));
         },
 
-        process: function (data) {
-            if (!this.hasFocus) {
+        process: function(data) {
+            if(!this.hasFocus) {
                 return;
             }
 
@@ -230,30 +226,33 @@
 
             items = items.slice(0, this.options.items);
 
-            $.each(items, function (i, item) {
+            $.each(items, function(i, item) {
                 var $element = $(_this.render(item));
 
                 $element.html($element.html().replace($element.text(), _this.highlighter($element.text())));
 
-                $.each(items[i], function (key, val) {
+                $.each(items[i], function(key, val) {
                     $element.attr('data-' + key, val);
                 });
-
+                
                 result.push($element[0].outerHTML);
-            });
+             });
 
-            if (result.length) {
+            if(result.length) {
                 this.$dropdown.html(result.join('')).show();
             } else {
                 this.$dropdown.hide();
             }
         },
 
-        renderDropdown: function () {
+        renderDropdown: function() {
+        	if (this.options.loadingUrl){
+        	 return '<ul class="rte-autocomplete dropdown-menu"><li class="rte-autocomplete-loading" style=\'background-image:url("'+this.options.loadingUrl+'")\'>&nbsp;</li></ul>';	
+        	}
             return '<ul class="rte-autocomplete dropdown-menu"></ul>';
         },
 
-        render: function (item) {
+        render: function(item) {
             return '<li>' +
                         '<a href="javascript:;"><span>' + item.name + '</span></a>' +
                     '</li>';
@@ -261,7 +260,7 @@
 
         autoCompleteClick: function (e) {
             var item = $(e.target).closest('li').data();
-            if (!$.isEmptyObject(item)) {
+            if(!$.isEmptyObject(item)) {
                 this.select(item);
                 this.cleanUp(false);
             }
@@ -271,25 +270,25 @@
 
         highlightPreviousResult: function () {
             var currentIndex = this.$dropdown.find('li.active').index(),
-                index = (currentIndex === 0) ? this.$dropdown.find('li').length - 1 : --currentIndex;
+                index = (currentIndex === 0) ? this.$dropdown.find('li').length - 1 : currentIndex -= 1;
 
             this.$dropdown.find('li').removeClass('active').eq(index).addClass('active');
         },
 
         highlightNextResult: function () {
             var currentIndex = this.$dropdown.find('li.active').index(),
-                index = (currentIndex === this.$dropdown.find('li').length - 1) ? 0 : ++currentIndex;
+                index = (currentIndex === this.$dropdown.find('li').length - 1) ? 0 : currentIndex += 1;
 
             this.$dropdown.find('li').removeClass('active').eq(index).addClass('active');
         },
 
         select: function (item) {
-            var selection = this.editor.dom.select('span#autocomplete')[0];
-            this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
+                var selection = this.editor.dom.select('span#autocomplete')[0];
+                this.editor.dom.remove(selection);
+                this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
         },
 
-        insert: function (item) {
+        insert: function(item) {
             return '<span>' + item.name + '</span>';
         },
 
@@ -309,8 +308,8 @@
                     focus = $(this.editor.selection.getNode()).offset().top === ($selection.offset().top + (($selection.outerHeight() - $selection.height()) / 2));
 
                 this.editor.dom.replace(replacement, $selection[0]);
-
-                if (focus) {
+                
+                if(focus) {
                     this.editor.selection.select(replacement);
                     this.editor.selection.collapse();
                 }
@@ -326,9 +325,7 @@
             var autoComplete,
                 autoCompleteData = ed.getParam('mentions');
 
-            // If the delimiter is undefined set default value to ['@'].
-            // If the delimiter is a string value convert it to an array. (backwards compatibility)
-            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !$.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
+            autoCompleteData.delimiter = autoCompleteData.delimiter || '@';
 
             function prevCharIsSpace() {
                 var $node = $(ed.selection.getNode().outerHTML),
@@ -338,13 +335,11 @@
                 return (!!$.trim(charachter).length) ? false : true;
             }
 
-            ed.on('keypress', function (e) {
-                var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
-                if (delimiterIndex > -1 && prevCharIsSpace()) {
-                    if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
+            ed.on('keypress', function(e) {
+                if (String.fromCharCode(e.which || e.keyCode) === autoCompleteData.delimiter && prevCharIsSpace()) {
+                    if(autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
-                        // Clone options object and set the used delimiter.
-                        autoComplete = new AutoComplete(ed, $.extend({}, autoCompleteData, { delimiter: autoCompleteData.delimiter[delimiterIndex] }));
+                        autoComplete = new AutoComplete(ed, autoCompleteData);
                     }
                 }
             });
