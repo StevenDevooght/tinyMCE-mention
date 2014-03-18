@@ -284,6 +284,7 @@
         },
 
         select: function (item) {
+            this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
             this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
