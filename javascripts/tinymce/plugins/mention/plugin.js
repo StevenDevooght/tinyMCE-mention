@@ -332,9 +332,9 @@
             autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !$.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
 
             function prevCharIsSpace() {
-                var $node = $(ed.selection.getNode().outerHTML),
-                    text = $node.text(),
-                    charachter = text.substr(text.length - 1, 1);
+                var start = ed.selection.getRng(true).startOffset,
+                      text = ed.selection.getRng(true).startContainer.data,
+                      charachter = text.substr(start - 1, 1);
 
                 return (!!$.trim(charachter).length) ? false : true;
             }
