@@ -333,7 +333,7 @@
 
             function prevCharIsSpace() {
                 var start = ed.selection.getRng(true).startOffset,
-                      text = ed.selection.getRng(true).startContainer.data,
+                      text = ed.selection.getRng(true).startContainer.data || '',
                       charachter = text.substr(start - 1, 1);
 
                 return (!!$.trim(charachter).length) ? false : true;
