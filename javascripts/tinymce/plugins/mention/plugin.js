@@ -45,12 +45,8 @@
 
         bindEvents: function () {
             this.editor.on('keyup', this.editorKeyUpProxy = $.proxy(this.rteKeyUp, this));
-            this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this));
+            this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this), true);
             this.editor.on('click', this.editorClickProxy = $.proxy(this.rteClicked, this));
-
-            //keydown event has to be called first.
-            var keyDownEvent = this.editor.__bindings.keydown.pop();
-            this.editor.__bindings.keydown.unshift(keyDownEvent);
 
             $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function () { this.cleanUp(true); }, this));
             $('body').on('click', this.bodyClickProxy = $.proxy(this.rteLostFocus, this));
