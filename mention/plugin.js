@@ -251,7 +251,7 @@
 
         render: function (item) {
             return '<li>' +
-                        '<a href="javascript:;"><span>' + item.name + '</span></a>' +
+                        '<a href="javascript:;"><span>' + item[this.options.queryBy] + '</span></a>' +
                     '</li>';
         },
 
@@ -287,7 +287,7 @@
         },
 
         insert: function (item) {
-            return '<span>' + item.name + '</span>';
+            return '<span>' + item[this.options.queryBy] + '</span>';
         },
 
         cleanUp: function (rollback) {
