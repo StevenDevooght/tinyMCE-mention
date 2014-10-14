@@ -159,8 +159,17 @@
 
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout($.proxy(function () {
+                var source;
+                
+                if (!$.isFunction(this.options.source)) {
+                    source = window[this.options.source] || this.options.source;
+                } else {
+                    source = this.options.source;
+                }
+                
                 // Added delimiter parameter as last argument for backwards compatibility.
-                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this), this.options.delimiter) : this.options.source;
+                var items = $.isFunction(source) ? source(this.query, $.proxy(this.process, this), this.options.delimiter) : source;
+                
                 if (items) {
                     this.process(items);
                 }
