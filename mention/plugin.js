@@ -16,7 +16,13 @@
         this.matcher = this.options.matcher || this.matcher;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
-        this.insert = this.options.insert || this.insert;
+        
+        if (!$.isFunction(this.options.insert)) {
+            this.insert = window[this.options.insert] || this.options.insert || this.insert;
+        } else {
+            this.insert = this.options.insert || this.insert;
+        }
+
         this.highlighter = this.options.highlighter || this.highlighter;
 
         this.query = '';
