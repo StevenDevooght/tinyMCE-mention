@@ -47,17 +47,18 @@
             this.editor.on('keyup', this.editorKeyUpProxy = $.proxy(this.rteKeyUp, this));
             this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this), true);
             this.editor.on('click', this.editorClickProxy = $.proxy(this.rteClicked, this));
+            this.editor.on('blur', this.editorBlurProxy = $.proxy(this.rteLostFocus, this));
 
             $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function () { this.cleanUp(true); }, this));
-            $('body').on('click', this.bodyClickProxy = $.proxy(this.rteLostFocus, this));
         },
 
         unbindEvents: function () {
             this.editor.off('keyup', this.editorKeyUpProxy);
             this.editor.off('keydown', this.editorKeyDownProxy);
             this.editor.off('click', this.editorClickProxy);
+            this.editor.off('blur', this.editorBlurProxy);
+
             $(this.editor.getWin()).off('scroll', this.rteScroll);
-            $('body').off('click', this.bodyClickProxy);
         },
 
         rteKeyUp: function (e) {
