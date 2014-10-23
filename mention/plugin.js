@@ -55,7 +55,7 @@
         unbindEvents: function () {
             this.editor.off('keyup', this.editorKeyUpProxy);
             this.editor.off('keydown', this.editorKeyDownProxy);
-            this.editor.on('click', this.editorClickProxy);
+            this.editor.off('click', this.editorClickProxy);
             $(this.editor.getWin()).off('scroll', this.rteScroll);
             $('body').off('click', this.bodyClickProxy);
         },
