@@ -47,17 +47,18 @@
             this.editor.on('keyup', this.editorKeyUpProxy = $.proxy(this.rteKeyUp, this));
             this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this), true);
             this.editor.on('click', this.editorClickProxy = $.proxy(this.rteClicked, this));
+            this.editor.on('blur', this.editorBlurProxy = $.proxy(this.rteLostFocus, this));
 
             $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function () { this.cleanUp(true); }, this));
-            $('body').on('click', this.bodyClickProxy = $.proxy(this.rteLostFocus, this));
         },
 
         unbindEvents: function () {
             this.editor.off('keyup', this.editorKeyUpProxy);
             this.editor.off('keydown', this.editorKeyDownProxy);
-            this.editor.on('click', this.editorClickProxy);
+            this.editor.off('click', this.editorClickProxy);
+            this.editor.off('blur', this.editorBlurProxy);
+
             $(this.editor.getWin()).off('scroll', this.rteScroll);
-            $('body').off('click', this.bodyClickProxy);
         },
 
         rteKeyUp: function (e) {
@@ -197,14 +198,10 @@
         },
 
         show: function () {
-            var rtePosition = $(this.editor.getContainer()).offset(),
-                contentAreaPosition = $(this.editor.getContentAreaContainer()).position(),
-                nodePosition = $(this.editor.dom.select('span#autocomplete')).position(),
-                top = rtePosition.top + contentAreaPosition.top + nodePosition.top + $(this.editor.selection.getNode()).innerHeight() - $(this.editor.getDoc()).scrollTop() + 5,
-                left = rtePosition.left + contentAreaPosition.left + nodePosition.left;
+            var offset = this.editor.inline ? this.offsetInline() : this.offset();
 
             this.$dropdown = $(this.renderDropdown())
-                                .css({ 'top': top, 'left': left });
+                                .css({ 'top': offset.top, 'left': offset.left });
 
             $('body').append(this.$dropdown);
 
@@ -251,7 +248,7 @@
 
         render: function (item) {
             return '<li>' +
-                        '<a href="javascript:;"><span>' + item.name + '</span></a>' +
+                        '<a href="javascript:;"><span>' + item[this.options.queryBy] + '</span></a>' +
                     '</li>';
         },
 
@@ -287,7 +284,7 @@
         },
 
         insert: function (item) {
-            return '<span>' + item.name + '</span>';
+            return '<span>' + item[this.options.queryBy] + '</span>';
         },
 
         cleanUp: function (rollback) {
@@ -312,6 +309,26 @@
                     this.editor.selection.collapse();
                 }
             }
+        },
+
+        offset: function () {
+            var rtePosition = $(this.editor.getContainer()).offset(),
+                contentAreaPosition = $(this.editor.getContentAreaContainer()).position(),
+                nodePosition = $(this.editor.dom.select('span#autocomplete')).position();
+
+            return {
+                top: rtePosition.top + contentAreaPosition.top + nodePosition.top + $(this.editor.selection.getNode()).innerHeight() - $(this.editor.getDoc()).scrollTop() + 5,
+                left: rtePosition.left + contentAreaPosition.left + nodePosition.left
+            };
+        },
+
+        offsetInline: function () {
+            var nodePosition = $(this.editor.dom.select('span#autocomplete')).offset();
+
+            return {
+                top: nodePosition.top + $(this.editor.selection.getNode()).innerHeight() + 5,
+                left: nodePosition.left
+            };
         }
 
     };
