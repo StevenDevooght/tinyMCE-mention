@@ -16,9 +16,11 @@
         this.matcher = this.options.matcher || this.matcher;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
-        
-        if (!$.isFunction(this.options.insert)) {
-            this.insert = window[this.options.insert] || this.options.insert || this.insert;
+
+        if ($.isFunction(this.options.insert) ) {
+            this.insert = this.options.insert;
+        } else if (typeof this.options.insert == 'string' && /^new Function/.test(this.options.insert)) {
+            this.insert = eval(this.options.insert);
         } else {
             this.insert = this.options.insert || this.insert;
         }
@@ -167,12 +169,12 @@
             this.searchTimeout = setTimeout($.proxy(function () {
                 var source;
                 
-                if (!$.isFunction(this.options.source)) {
-                    source = window[this.options.source] || this.options.source;
-                } else {
+                if ($.isFunction(this.options.source) ) {
                     source = this.options.source;
+                } else if (typeof this.options.source == 'string' && /^new Function/.test(this.options.source)) {
+                    source = eval(this.options.source);
                 }
-                
+
                 // Added delimiter parameter as last argument for backwards compatibility.
                 var items = $.isFunction(source) ? source(this.query, $.proxy(this.process, this), this.options.delimiter) : source;
                 
