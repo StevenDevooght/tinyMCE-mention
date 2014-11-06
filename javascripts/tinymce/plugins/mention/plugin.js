@@ -192,7 +192,7 @@
         },
 
         highlighter: function (text) {
-            return text.replace(new RegExp('(' + this.query + ')', 'ig'), function ($1, match) {
+            return text.replace(new RegExp('(' + this.query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1") + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
             });
         },
