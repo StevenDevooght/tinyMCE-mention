@@ -1,0 +1,21 @@
+{
+    "name": "tinyMCE-mention",
+    "version": "4.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/CogniStreamer/tinyMCE-mention.git"
+    },
+    "description": "Mention/Autocomplete plugin for tinyMCE WYSIWYG editor",
+    "author": "Steven Devooght",
+    "bugs": {
+        "url": "https://github.com/CogniStreamer/tinyMCE-mention/issues"
+    },
+    "private": true,
+    "engines": {
+        "node": ">=0.10.26"
+    },
+    "devDependencies": {
+        "gulp": "~3.8.10",
+        "gulp-qunit": "~1.1.0"
+    }
+}
