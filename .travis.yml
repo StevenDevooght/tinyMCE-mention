@@ -1,4 +1,4 @@
 before_script:
-	- sudo npm install
-	
+    - sudo npm install
+
 script: gulp test
