@@ -17,5 +17,8 @@
     "devDependencies": {
         "gulp": "~3.8.10",
         "gulp-qunit": "~1.1.0"
+    },
+    "scripts": {
+        "test": "gulp test"
     }
 }

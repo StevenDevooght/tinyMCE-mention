@@ -1,4 +1,3 @@
-before_script:
-    - sudo npm install
-
-script: gulp test
+language: node_js
+node_js:
+    - "0.10"
