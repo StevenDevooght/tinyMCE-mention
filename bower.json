@@ -21,5 +21,12 @@
     "tests",
     "gulpfile.js",
     "package.json"
-  ]
+  ],
+  "dependencies": {
+    "tinymce-dist": "~4.1.7",
+    "jquery": "1.8.3"
+  },
+  "devDependencies": {
+    "qunit": "~1.16.0"
+  }
 }
