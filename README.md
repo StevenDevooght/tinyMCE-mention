@@ -17,11 +17,17 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 * [tinyMCE](http://www.tinymce.com/)
 * [jQuery](http://jquery.com/)
 
-> NOTE: Use v1.0.0 if you're using tinyMCE v3.5.x, use v2.0.0 if you're using tinyMCE v4.0.x
+> NOTE: Use v1.0.0 if you're using tinyMCE v3.5.x, use v4.0.0 if you're using tinyMCE v4.0.x
 
 ##Usage
 
-Copy the source of the plugin to the plugins directory of your tinyMCE installation.
+Install using bower.
+
+```
+bower install tinymce-mention
+```
+
+Or copy the source of the plugin to the plugins directory of your tinyMCE installation.
 Add the mention plugin to your tinyMCE configuration.
 
 ```javascript
