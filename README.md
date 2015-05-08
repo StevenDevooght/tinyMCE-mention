@@ -75,7 +75,7 @@ source: function (query, process, delimiter) {
        $.getJSON('ajax/users.json', function (data) {
           //call process to show the result
           process(data)
-       }
+       });
     }
 }
 ```
