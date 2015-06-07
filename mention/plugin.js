@@ -17,8 +17,10 @@
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
         this.insert = this.options.insert || this.insert;
+        /* there may be occation where the added space on insert is not wanted like when inserting custom tag types */
+        this.isertSpace = (this.options.insertSpace == false || this.options.insertSpace == null)?'':'&nbsp';
         this.highlighter = this.options.highlighter || this.highlighter;
-
+        
         this.query = '';
         this.hasFocus = true;
 
@@ -282,7 +284,7 @@
             this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
+            this.editor.execCommand('mceInsertContent', false, this.insert(item) + this.insertSpace);
         },
 
         insert: function (item) {
