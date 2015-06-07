@@ -1,6 +1,6 @@
 /*global tinymce, jQuery */
 
-(function (tinymce, $) {
+;(function (tinymce, $) {
     'use strict';
 
     var AutoComplete = function (ed, options) {
@@ -17,6 +17,9 @@
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
         this.insert = this.options.insert || this.insert;
+
+        /** We may want the carret to end up directly next to inserted items **/
+        this.insertSpace =  (this.options.insertSpace == false || this.options.insertSpace == null) ? '' : '&nbsp;';
         this.highlighter = this.options.highlighter || this.highlighter;
 
         this.query = '';
@@ -147,14 +150,14 @@
             }
         },
 
-        rteLostFocus: function () {
+        rteLostFocus: function (ed, e) {
             if (this.hasFocus) {
                 this.cleanUp(true);
             }
         },
 
         lookup: function () {
-            this.query = $.trim($(this.editor.getBody()).find('#autocomplete-searchtext').text()).replace('\ufeff', '');
+            this.query = $.trim($(this.editor.getBody()).find("#autocomplete-searchtext").text()).replace('\ufeff', '');
 
             if (this.$dropdown === undefined) {
                 this.show();
@@ -194,7 +197,7 @@
         },
 
         highlighter: function (text) {
-            return text.replace(new RegExp('(' + this.query.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ')', 'ig'), function ($1, match) {
+            return text.replace(new RegExp('(' + this.query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1") + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
             });
         },
@@ -282,7 +285,7 @@
             this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
+            this.editor.execCommand('mceInsertContent', false, this.insert(item) + this.insertSpace);
         },
 
         insert: function (item) {
@@ -337,7 +340,7 @@
 
     tinymce.create('tinymce.plugins.Mention', {
 
-        init: function (ed) {
+        init: function (ed, url) {
 
             var autoComplete,
                 autoCompleteData = ed.getParam('mentions');
@@ -378,4 +381,4 @@
 
     tinymce.PluginManager.add('mention', tinymce.plugins.Mention);
 
-}(tinymce, jQuery));
+})(tinymce, jQuery);
