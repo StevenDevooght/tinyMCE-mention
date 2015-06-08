@@ -282,11 +282,11 @@
             this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
+            this.editor.execCommand('mceInsertContent', false, this.insert(item));
         },
 
         insert: function (item) {
-            return '<span>' + item[this.options.queryBy] + '</span>';
+            return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
 
         cleanUp: function (rollback) {
