@@ -320,11 +320,11 @@
             autoCompleteData.delimiter = autoCompleteData.delimiter || '@';
 
             function prevCharIsSpace() {
-                var $node = $(ed.selection.getNode().outerHTML),
-                    text = $node.text(),
-                    charachter = text.substr(text.length - 1, 1);
+                var range = ed.selection.getRng(),
+                    startOffset = range.startOffset > 0 ? range.startOffset - 1 : 0,
+                    character = range.startContainer.data === undefined ? ' ' : range.startContainer.data[startOffset];
 
-                return (!!$.trim(charachter).length) ? false : true;
+                return (!!$.trim(character).length) ? false : true;
             }
 
             ed.onKeyPress.add(function(ed, e){
