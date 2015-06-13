@@ -2,7 +2,7 @@
 
 Mentions plugin for tinyMCE WYSIWYG editor.
 
-![preview](http://www.cognistreamer.com/shared/github/tinyMCE-mentions.png)
+![preview](https://static.cognistreamer.com/mention-plugin/mention-4.0.0.png)
 
 ##Browser compatibility
 
@@ -17,7 +17,7 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 * [tinyMCE](http://www.tinymce.com/)
 * [jQuery](http://jquery.com/)
 
-> NOTE: Use v1.0.0 if you're using tinyMCE v3.5.x, use v4.0.0 if you're using tinyMCE v4.0.x
+> NOTE: Use v3.x if you're using tinyMCE v3.5.x, use v4.x if you're using tinyMCE v4.x
 
 ##Usage
 
