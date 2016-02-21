@@ -118,7 +118,7 @@
     });
 
     QUnit.test('pick entry', function (assert) {
-        assert.expect(3);
+        assert.expect(4);
 
         pressDelimiter();
 
@@ -145,9 +145,7 @@
                 pressArrowDown();
                 pressEnter();
 
-                // Editor behaves differently when ran in a phantomjs environment.
-                // Disable assertion for now.
-                //assert.equal(editor.getContent(), '<p>Jenniffer Caffey&nbsp;will&nbsp;look&nbsp;into&nbsp;this.&nbsp;Can&nbsp;you&nbsp;also&nbsp;have&nbsp;a&nbsp;look&nbsp;Elizabet Gebhart&nbsp;</p>', 'Second entry submitted.');
+                assert.equal(editor.getContent(), '<p>Jenniffer Caffey&nbsp;will&nbsp;look&nbsp;into&nbsp;this.&nbsp;Can&nbsp;you&nbsp;also&nbsp;have&nbsp;a&nbsp;look&nbsp;Elizabet Gebhart&nbsp;</p>', 'Second entry submitted.');
 
                 done2();
             }, 600);
