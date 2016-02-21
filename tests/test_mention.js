@@ -5,6 +5,39 @@
 
     var editor;
 
+    function pressDelimiter() {
+        editor.fire('keypress', { which: 64 });
+        editor.fire('keyup');
+    }
+
+    function pressArrowUp() {
+        editor.fire('keydown', { which: 38 });
+        editor.fire('keyup', { which: 38 });
+    }
+
+    function pressArrowDown() {
+        editor.fire('keydown', { which: 40 });
+        editor.fire('keyup', { which: 40 });
+    }
+
+    function pressEscape() {
+        editor.fire('keydown', { which: 27 });
+        editor.fire('keyup', { which: 27 });
+    }
+
+    function pressEnter() {
+        editor.fire('keydown', { which: 13 });
+        editor.fire('keyup', { which: 13 });
+    }
+
+    function insertText(text) {
+        var i;
+        for (i = 0; i < text.length; i++) {
+            editor.insertContent(text[i]);
+            editor.fire('keyup', { which: text.charCodeAt(i) });
+        }
+    }
+
     QUnit.config.autostart = false;
 
     QUnit.module('Mention', {
@@ -156,38 +189,5 @@
             done();
         }, 600);
     });
-
-    function pressDelimiter() {
-        editor.fire('keypress', { which: 64 });
-        editor.fire('keyup');
-    }
-
-    function pressArrowUp() {
-        editor.fire('keydown', { which: 38 });
-        editor.fire('keyup', { which: 38 });
-    }
-
-    function pressArrowDown() {
-        editor.fire('keydown', { which: 40 });
-        editor.fire('keyup', { which: 40 });
-    }
-
-    function pressEscape() {
-        editor.fire('keydown', { which: 27 });
-        editor.fire('keyup', { which: 27 });
-    }
-
-    function pressEnter() {
-        editor.fire('keydown', { which: 13 });
-        editor.fire('keyup', { which: 13 });
-    }
-
-    function insertText(text) {
-        var i;
-        for (i = 0; i < text.length; i++) {
-            editor.insertContent(text[i]);
-            editor.fire('keyup', { which: text.charCodeAt(i) });
-        }
-    }
 
 }(tinymce, jQuery, QUnit));
