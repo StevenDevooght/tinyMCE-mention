@@ -6,6 +6,7 @@ var gulp = require('gulp'),
 gulp.task('lint', function () {
     return gulp.src(['./mention/plugin.js', './tests/test_mention.js'])
         .pipe(jshint())
+        .pipe(jshint.reporter('default'))
         .pipe(jshint.reporter('fail'));
 });
 
