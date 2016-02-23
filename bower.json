@@ -23,10 +23,10 @@
     "package.json"
   ],
   "dependencies": {
-    "tinymce-dist": "~4.1",
+    "tinymce-dist": "~4.3",
     "jquery": "1.8.3"
   },
   "devDependencies": {
-    "qunit": "~1.16.0"
+    "qunit": "~1.21.0"
   }
 }
