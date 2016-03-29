@@ -355,7 +355,8 @@
             }
 
             ed.on('keypress', function (e) {
-                var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
+                var keyCode = (typeof e.which == 'number') ? e.which : e.keyCode;
+                var delimiterIndex = $.inArray(String.fromCharCode(keyCode), autoCompleteData.delimiter);
                 if (delimiterIndex > -1 && prevCharIsSpace()) {
                     if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
