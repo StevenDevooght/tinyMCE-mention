@@ -1,5 +1,7 @@
 #tinyMCE mention
 
+[![Travis](https://travis-ci.org/StevenDevooght/tinyMCE-mention.svg?branch=master)](https://travis-ci.org/StevenDevooght/tinyMCE-mention)
+
 Mentions plugin for tinyMCE WYSIWYG editor.
 
 ![preview](https://static.cognistreamer.com/mention-plugin/mention-4.0.0.png)
