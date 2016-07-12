@@ -6,6 +6,11 @@ module.exports = {
     output: {
 		filename: './dist/bundle.js'
     },
+	resolve: {
+		alias: {
+			'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery')
+		}
+	},
     module: {
         loaders: [
             {
@@ -14,15 +19,10 @@ module.exports = {
 				  'imports?this=>window',
 				  'exports?window.tinymce'
 				]
-			  },
-			  {
-				test: /tinymce\/(themes|plugins)\//,
-				loaders: [
-				  'imports?this=>window'
-				]
-			  }    
+			  }
         ]
     },
     debug: true,
     watch: false
 };
+	
