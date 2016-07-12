@@ -1,7 +1,7 @@
 var tinymce = require('tinymce/tinymce');
 
 require('tinymce/themes/modern/theme');
-require('./../../mention/plugin');
+require('tinymce-mention');
 
 tinymce.init({
   selector: '#rte',
