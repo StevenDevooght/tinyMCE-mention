@@ -24,11 +24,10 @@
       g = this;
     }
 
-    f(g.jQuery);
+    f(g.tinymce.dom.DomQuery);
   }
 
 })(function ($) {
-	var $ = window.tinymce.dom.DomQuery;
     'use strict';
 
     var AutoComplete = function (ed, options) {
