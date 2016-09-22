@@ -23,8 +23,8 @@
     } else {
       g = this;
     }
-    
-    f(g.jQuery);
+
+    f(g.tinymce.dom.DomQuery);
   }
 
 })(function ($) {
@@ -33,7 +33,7 @@
     var AutoComplete = function (ed, options) {
         this.editor = ed;
 
-        this.options = $.extend({}, {
+        this.options = Object.assign({}, {
             source: [],
             delay: 500,
             queryBy: 'name',
@@ -54,6 +54,45 @@
         this.bindEvents();
     };
 
+    var helpers = {
+    	offset: function (el) {
+		    var rect = el.getBoundingClientRect();
+
+		    return {
+			    top: rect.top + document.body.scrollTop,
+			    left: rect.left + document.body.scrollLeft
+		    };
+	    },
+
+	    position: function (el) {
+		    if(!el) return {top: 0, left: 0};
+		    return {left: el.offsetLeft, top: el.offsetTop};
+	    },
+
+	    data: function (el) {
+		    var data = {};
+		    [].forEach.call(el.attributes, function(attr) {
+			    if (/^data-/.test(attr.name)) {
+				    var camelCaseName = attr.name.substr(5).replace(/-(.)/g, function ($0, $1) {
+					    return $1.toUpperCase();
+				    });
+				    data[camelCaseName] = attr.value;
+			    }
+		    });
+		    return data;
+	    },
+
+	    index: function(node) {
+			var children = node.parentNode.childNodes;
+			var num = 0;
+			for (var i=0; i<children.length; i++) {
+				if (children[i]==node) return num;
+				if (children[i].nodeType==1) num++;
+			}
+			return -1;
+		}
+    };
+
     AutoComplete.prototype = {
 
         constructor: AutoComplete,
@@ -71,13 +110,13 @@
         },
 
         bindEvents: function () {
-            this.editor.on('keyup', this.editorKeyUpProxy = $.proxy(this.rteKeyUp, this));
-            this.editor.on('keydown', this.editorKeyDownProxy = $.proxy(this.rteKeyDown, this), true);
-            this.editor.on('click', this.editorClickProxy = $.proxy(this.rteClicked, this));
+            this.editor.on('keyup', this.editorKeyUpProxy = this.rteKeyUp.bind(this));
+            this.editor.on('keydown', this.editorKeyDownProxy = this.rteKeyDown.bind(this), true);
+            this.editor.on('click', this.editorClickProxy = this.rteClicked.bind(this));
 
-            $('body').on('click', this.bodyClickProxy = $.proxy(this.rteLostFocus, this));
+            $('body').on('click', this.bodyClickProxy = this.rteLostFocus.bind(this));
 
-            $(this.editor.getWin()).on('scroll', this.rteScroll = $.proxy(function () { this.cleanUp(true); }, this));
+            $(this.editor.getWin()).on('scroll', this.rteScroll = function () { this.cleanUp(true); }.bind(this));
         },
 
         unbindEvents: function () {
@@ -119,7 +158,7 @@
             case 13:
                 var item = (this.$dropdown !== undefined) ? this.$dropdown.find('li.active') : [];
                 if (item.length) {
-                    this.select(item.data());
+                    this.select(helpers.data(item[0]));
                     this.cleanUp(false);
                 } else {
                     this.cleanUp(true);
@@ -181,20 +220,20 @@
         },
 
         lookup: function () {
-            this.query = $.trim($(this.editor.getBody()).find('#autocomplete-searchtext').text()).replace('\ufeff', '');
+            this.query = $(this.editor.getBody()).find('#autocomplete-searchtext').text().trim().replace('\ufeff', '');
 
             if (this.$dropdown === undefined) {
                 this.show();
             }
 
             clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout($.proxy(function () {
+            this.searchTimeout = setTimeout(function () {
                 // Added delimiter parameter as last argument for backwards compatibility.
-                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this), this.options.delimiter) : this.options.source;
+                var items = typeof this.options.source === 'function' ? this.options.source(this.query, this.process.bind(this), this.options.delimiter) : this.options.source;
                 if (items) {
                     this.process(items);
                 }
-            }, this), this.options.delay);
+            }.bind(this), this.options.delay);
         },
 
         matcher: function (item) {
@@ -234,7 +273,7 @@
 
             $('body').append(this.$dropdown);
 
-            this.$dropdown.on('click', $.proxy(this.autoCompleteClick, this));
+            this.$dropdown.on('click', this.autoCompleteClick.bind(this));
         },
 
         process: function (data) {
@@ -244,7 +283,7 @@
 
             var _this = this,
                 result = [],
-                items = $.grep(data, function (item) {
+                items = data.filter(function (item) {
                     return _this.matcher(item);
                 });
 
@@ -252,17 +291,19 @@
 
             items = items.slice(0, this.options.items);
 
-            $.each(items, function (i, item) {
-                var $element = $(_this.render(item));
+	        result = items.map(function(item) {
+		        var $element = $(_this.render(item));
 
-                $element.html($element.html().replace($element.text(), _this.highlighter($element.text())));
+		        $element.html($element.html().replace($element.text(), _this.highlighter($element.text())));
 
-                $.each(items[i], function (key, val) {
-                    $element.attr('data-' + key, val);
-                });
+		        for(var key in item) {
+			        if (item.hasOwnProperty(key)) {
+				        $element.attr('data-' + key, item[key]);
+			        }
+		        }
 
-                result.push($element[0].outerHTML);
-            });
+		        return $element[0].outerHTML;
+	        });
 
             if (result.length) {
                 this.$dropdown.html(result.join('')).show();
@@ -282,8 +323,8 @@
         },
 
         autoCompleteClick: function (e) {
-            var item = $(e.target).closest('li').data();
-            if (!$.isEmptyObject(item)) {
+            var item = helpers.data($(e.target).closest('li')[0]);
+            if (Object.getOwnPropertyNames(item).length > 0) {
                 this.select(item);
                 this.cleanUp(false);
             }
@@ -292,14 +333,16 @@
         },
 
         highlightPreviousResult: function () {
-            var currentIndex = this.$dropdown.find('li.active').index(),
+            var activeLis = this.$dropdown.find('li.active'),
+		        currentIndex = activeLis.length ? helpers.index(this.$dropdown.find('li.active')[0]) : 1,
                 index = (currentIndex === 0) ? this.$dropdown.find('li').length - 1 : --currentIndex;
 
             this.$dropdown.find('li').removeClass('active').eq(index).addClass('active');
         },
 
         highlightNextResult: function () {
-            var currentIndex = this.$dropdown.find('li.active').index(),
+	        var activeLis = this.$dropdown.find('li.active'),
+		        currentIndex = activeLis.length ? helpers.index(this.$dropdown.find('li.active')[0]) : -1,
                 index = (currentIndex === this.$dropdown.find('li').length - 1) ? 0 : ++currentIndex;
 
             this.$dropdown.find('li').removeClass('active').eq(index).addClass('active');
@@ -327,11 +370,11 @@
 
             if (rollback) {
                 var text = this.query,
-                    $selection = $(this.editor.dom.select('span#autocomplete')),
+                    selection = this.editor.dom.select('span#autocomplete')[0],
                     replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
-                    focus = $(this.editor.selection.getNode()).offset().top === ($selection.offset().top + (($selection.outerHeight() - $selection.height()) / 2));
+                    focus = helpers.offset(this.editor.selection.getNode()).top === (helpers.offset(selection).top + ((selection.offsetHeight - selection.clientHeight) / 2));
 
-                this.editor.dom.replace(replacement, $selection[0]);
+                this.editor.dom.replace(replacement, selection);
 
                 if (focus) {
                     this.editor.selection.select(replacement);
@@ -341,21 +384,21 @@
         },
 
         offset: function () {
-            var rtePosition = $(this.editor.getContainer()).offset(),
-                contentAreaPosition = $(this.editor.getContentAreaContainer()).position(),
-                nodePosition = $(this.editor.dom.select('span#autocomplete')).position();
+            var //rtePosition = helpers.offset(this.editor.getContainer()),
+                contentAreaPosition = helpers.position(this.editor.getContentAreaContainer()),
+                nodePosition = helpers.position(this.editor.dom.select('span#autocomplete')[0]);
 
             return {
-                top: rtePosition.top + contentAreaPosition.top + nodePosition.top + $(this.editor.selection.getNode()).innerHeight() - $(this.editor.getDoc()).scrollTop() + 5,
-                left: rtePosition.left + contentAreaPosition.left + nodePosition.left
+                top: /*rtePosition.top +*/ contentAreaPosition.top + nodePosition.top + this.editor.selection.getNode().offsetHeight - this.editor.getDoc().body.scrollTop + 5,
+                left: /*rtePosition.left +*/ contentAreaPosition.left + nodePosition.left
             };
         },
 
         offsetInline: function () {
-            var nodePosition = $(this.editor.dom.select('span#autocomplete')).offset();
+            var nodePosition = helpers.offset(this.editor.dom.select('span#autocomplete')[0]);
 
             return {
-                top: nodePosition.top + $(this.editor.selection.getNode()).innerHeight() + 5,
+                top: nodePosition.top + this.editor.selection.getNode().clientHeight + 5,
                 left: nodePosition.left
             };
         }
@@ -378,16 +421,16 @@
                       text = ed.selection.getRng(true).startContainer.data || '',
                       charachter = text.substr(start - 1, 1);
 
-                return (!!$.trim(charachter).length) ? false : true;
+                return !charachter.trim().length;
             }
 
             ed.on('keypress', function (e) {
-                var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
+                var delimiterIndex = autoCompleteData.delimiter.indexOf(String.fromCharCode(e.which || e.keyCode));
                 if (delimiterIndex > -1 && prevCharIsSpace()) {
                     if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
                         // Clone options object and set the used delimiter.
-                        autoComplete = new AutoComplete(ed, $.extend({}, autoCompleteData, { delimiter: autoCompleteData.delimiter[delimiterIndex] }));
+                        autoComplete = new AutoComplete(ed, Object.assign({}, autoCompleteData, { delimiter: autoCompleteData.delimiter[delimiterIndex] }));
                     }
                 }
             });
@@ -404,5 +447,5 @@
     });
 
     tinymce.PluginManager.add('mention', tinymce.plugins.Mention);
-  
+
 });
