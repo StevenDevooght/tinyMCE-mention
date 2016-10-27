@@ -65,7 +65,9 @@
 	    },
 
 	    position: function (el) {
-		    if(!el) return {top: 0, left: 0};
+		    if(!el) {
+				return {top: 0, left: 0};
+			}
 		    return {left: el.offsetLeft, top: el.offsetTop};
 	    },
 
@@ -86,8 +88,12 @@
 			var children = node.parentNode.childNodes;
 			var num = 0;
 			for (var i=0; i<children.length; i++) {
-				if (children[i]==node) return num;
-				if (children[i].nodeType==1) num++;
+				if (children[i] === node) {
+					return num;
+				}
+				if (children[i].nodeType === 1) {
+					num++;
+				}
 			}
 			return -1;
 		}
@@ -370,11 +376,11 @@
 
             if (rollback) {
                 var text = this.query,
-                    selection = this.editor.dom.select('span#autocomplete')[0],
+                    selection = this.editor.dom.select('span#autocomplete'),
                     replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
-                    focus = helpers.offset(this.editor.selection.getNode()).top === (helpers.offset(selection).top + ((selection.offsetHeight - selection.clientHeight) / 2));
+                    focus = helpers.offset(this.editor.selection.getNode()).top === helpers.offset(selection[0]).top;
 
-                this.editor.dom.replace(replacement, selection);
+                this.editor.dom.replace(replacement, selection[0]);
 
                 if (focus) {
                     this.editor.selection.select(replacement);
