@@ -40,6 +40,8 @@
             items: 10
         }, options);
 
+        this.options.insertFrom = this.options.insertFrom || this.options.queryBy;
+
         this.matcher = this.options.matcher || this.matcher;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
@@ -313,7 +315,7 @@
         },
 
         insert: function (item) {
-            return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
+            return '<span>' + item[this.options.insertFrom] + '</span>&nbsp;';
         },
 
         cleanUp: function (rollback) {
