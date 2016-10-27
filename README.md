@@ -144,6 +144,13 @@ highlighter: function(text) {
 }
 ```
 
+###insertFrom
+Key used in the default `insert` implementation.
+
+**Default**: `queryBy` value
+
+> NOTE: key can be any property defined in`source` option.
+
 ###insert
 
 Callback to set the content you want to insert in tinyMCE.
