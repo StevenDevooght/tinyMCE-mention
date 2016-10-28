@@ -390,13 +390,13 @@
         },
 
         offset: function () {
-            var //rtePosition = helpers.offset(this.editor.getContainer()),
+            var rtePosition = helpers.offset(this.editor.getContainer()),
                 contentAreaPosition = helpers.position(this.editor.getContentAreaContainer()),
                 nodePosition = helpers.position(this.editor.dom.select('span#autocomplete')[0]);
 
             return {
-                top: /*rtePosition.top +*/ contentAreaPosition.top + nodePosition.top + this.editor.selection.getNode().offsetHeight - this.editor.getDoc().body.scrollTop + 5,
-                left: /*rtePosition.left +*/ contentAreaPosition.left + nodePosition.left
+                top: rtePosition.top + contentAreaPosition.top + nodePosition.top + this.editor.selection.getNode().offsetHeight - this.editor.getDoc().body.scrollTop + 5,
+                left: rtePosition.left + contentAreaPosition.left + nodePosition.left
             };
         },
 
