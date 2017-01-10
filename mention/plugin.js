@@ -45,7 +45,15 @@
         this.matcher = this.options.matcher || this.matcher;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
-        this.insert = this.options.insert || this.insert;
+
+        if ($.isFunction(this.options.insert) ) {
+            this.insert = this.options.insert;
+        } else if (typeof this.options.insert == 'string' && /^new Function/.test(this.options.insert)) {
+            this.insert = eval(this.options.insert);
+        } else {
+            this.insert = this.options.insert || this.insert;
+        }
+
         this.highlighter = this.options.highlighter || this.highlighter;
 
         this.query = '';
@@ -191,8 +199,17 @@
 
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout($.proxy(function () {
+                var source;
+                
+                if ($.isFunction(this.options.source) ) {
+                    source = this.options.source;
+                } else if (typeof this.options.source == 'string' && /^new Function/.test(this.options.source)) {
+                    source = eval(this.options.source);
+                }
+
                 // Added delimiter parameter as last argument for backwards compatibility.
-                var items = $.isFunction(this.options.source) ? this.options.source(this.query, $.proxy(this.process, this), this.options.delimiter) : this.options.source;
+                var items = $.isFunction(source) ? source(this.query, $.proxy(this.process, this), this.options.delimiter) : source;
+                
                 if (items) {
                     this.process(items);
                 }
