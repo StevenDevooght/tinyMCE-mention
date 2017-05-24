@@ -1,4 +1,4 @@
-#tinyMCE mention
+# tinyMCE mention
 
 [![Travis](https://travis-ci.org/StevenDevooght/tinyMCE-mention.svg?branch=master)](https://travis-ci.org/StevenDevooght/tinyMCE-mention)
 
@@ -6,7 +6,7 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 
 ![preview](https://static.cognistreamer.com/mention-plugin/mention-4.0.0.png)
 
-##Browser compatibility
+## Browser compatibility
 
 * IE7+
 * Chrome
@@ -14,14 +14,14 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 * Firefox
 * Opera
 
-##Dependencies
+## Dependencies
 
 * [tinyMCE](http://www.tinymce.com/)
 * [jQuery](http://jquery.com/)
 
 > NOTE: Use v3.x if you're using tinyMCE v3.5.x, use v4.x if you're using tinyMCE v4.x
 
-##Usage
+## Usage
 
 Install using bower.
 
@@ -50,13 +50,13 @@ mentions: {
 },
 ```
 
-##Configuration
+## Configuration
 
-###source (required)
+### source (required)
 
 The source parameter can be configured as an array or a function.
 
-####array
+#### array
 
 ```javascript
 source: [
@@ -67,7 +67,7 @@ source: [
 ]
 ```
 
-####function
+#### function
 
 ```javascript
 source: function (query, process, delimiter) {
@@ -82,23 +82,23 @@ source: function (query, process, delimiter) {
 }
 ```
 
-###queryBy
+### queryBy
 
 The name of the property used to do the lookup in the `source`.
 
 **Default**: `'name'`.
 
-###delimiter
+### delimiter
 
 Character that will trigger the mention plugin. Can be configured as a character or an array of characters.
 
-####character
+#### character
 
 ```javascript
 delimiter: '@'
 ```
 
-####array
+#### array
 
 ```javascript
 delimiter: ['@', '#']
@@ -106,19 +106,19 @@ delimiter: ['@', '#']
 
 **Default**: `'@'`.
 
-###delay
+### delay
 
 Delay of the lookup in milliseconds when typing a new character.
 
 **Default**: `500`.
 
-###items
+### items
 
 Maximum number of items displayed in the dropdown.
 
 **Default**: `10`
 
-###matcher
+### matcher
 
 Checks for a match in the source collection.
 
@@ -131,7 +131,7 @@ matcher: function(item) {
 }
 ```
 
-###highlighter
+### highlighter
 
 Highlights the part of the query in the matched result.
 
@@ -144,7 +144,7 @@ highlighter: function(text) {
 }
 ```
 
-###insertFrom
+### insertFrom
 Key used in the default `insert` implementation.
 
 **Default**: `queryBy` value
@@ -163,7 +163,7 @@ insert: function(item) {
 
 > NOTE: item parameter has all properties defined in the `source` option.
 
-###render
+### render
 
 Callback to set the HTML of an item in the autocomplete dropdown.
 
@@ -177,7 +177,7 @@ render: function(item) {
 
 > NOTE: item parameter has all properties defined in the `source` option.
 
-###renderDropdown
+### renderDropdown
 
 Callback to set the wrapper HTML for the autocomplete dropdown.
 
@@ -188,7 +188,7 @@ renderDropdown: function() {
 }
 ```
 
-##License
+## License
 
 MIT licensed
 
