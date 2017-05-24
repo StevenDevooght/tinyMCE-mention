@@ -43,6 +43,7 @@
         this.options.insertFrom = this.options.insertFrom || this.options.queryBy;
 
         this.matcher = this.options.matcher || this.matcher;
+        this.sorter = this.options.sorter || this.sorter;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
         this.insert = this.options.insert || this.insert;
