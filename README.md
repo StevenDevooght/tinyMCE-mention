@@ -151,7 +151,7 @@ Key used in the default `insert` implementation.
 
 > NOTE: key can be any property defined in`source` option.
 
-###insert
+### insert
 
 Callback to set the content you want to insert in tinyMCE.
 
