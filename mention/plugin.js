@@ -330,8 +330,13 @@
 
             if (rollback) {
                 var text = this.query,
-                    $selection = $(this.editor.dom.select('span#autocomplete')),
-                    replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
+                    $selection = $(this.editor.dom.select('span#autocomplete'));
+
+                if (!$selection.length) {
+                    return;
+                }
+                    
+                var replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
                     focus = $(this.editor.selection.getNode()).offset().top === ($selection.offset().top + (($selection.outerHeight() - $selection.height()) / 2));
 
                 this.editor.dom.replace(replacement, $selection[0]);
