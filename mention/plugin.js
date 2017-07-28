@@ -37,7 +37,8 @@
             source: [],
             delay: 500,
             queryBy: 'name',
-            items: 10
+            items: 10,
+            closeOnScroll: true,
         }, options);
 
         this.matcher = this.options.matcher || this.matcher;
@@ -122,7 +123,8 @@
 
             $('body').on('click', this.bodyClickProxy = this.rteLostFocus.bind(this));
 
-            $(this.editor.getWin()).on('scroll', this.rteScroll = function () { this.cleanUp(true); }.bind(this));
+	        if(this.options.closeOnScroll)
+                $(this.editor.getWin()).on('scroll', this.rteScroll = function () { this.cleanUp(true); }.bind(this));
         },
 
         unbindEvents: function () {
@@ -132,7 +134,8 @@
 
             $('body').off('click', this.bodyClickProxy);
 
-            $(this.editor.getWin()).off('scroll', this.rteScroll);
+	        if(this.options.closeOnScroll)
+                $(this.editor.getWin()).off('scroll', this.rteScroll);
         },
 
         rteKeyUp: function (e) {
