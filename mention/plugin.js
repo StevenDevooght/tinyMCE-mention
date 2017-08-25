@@ -256,7 +256,7 @@
             items = items.slice(0, this.options.items);
 
             $.each(items, function (i, item) {
-                var $element = $(_this.render(item));
+                var $element = $(_this.render(item, i));
 
                 $element.html($element.html().replace($element.text(), _this.highlighter($element.text())));
 
@@ -278,7 +278,7 @@
             return '<ul class="rte-autocomplete dropdown-menu"><li class="loading"></li></ul>';
         },
 
-        render: function (item) {
+        render: function (item, index) {
             return '<li>' +
                         '<a href="javascript:;"><span>' + item[this.options.queryBy] + '</span></a>' +
                     '</li>';
