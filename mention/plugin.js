@@ -384,7 +384,7 @@
             function prevCharIsSpace() {
                 var start = ed.selection.getRng(true).startOffset,
                       text = ed.selection.getRng(true).startContainer.data || '',
-                      charachter = text.substr(start - 1, 1);
+                      charachter = text.substr(start > 0 ? start - 1 : 0, 1);
 
                 return (!!$.trim(charachter).length) ? false : true;
             }
