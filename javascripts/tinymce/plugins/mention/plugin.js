@@ -1,6 +1,33 @@
-/*global tinymce, jQuery */
+/*global tinymce, module, require, define, global, self */
 
-;(function (tinymce, $) {
+;(function (f) {
+  'use strict';
+
+  // CommonJS
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
+    module.exports = f(require('jquery'));
+
+  // RequireJS
+  } else if (typeof define === 'function'  && define.amd) {
+    define(['jquery'], f);
+
+  // <script>
+  } else {
+    var g;
+    if (typeof window !== 'undefined') {
+      g = window;
+    } else if (typeof global !== 'undefined') {
+      g = global;
+    } else if (typeof self !== 'undefined') {
+      g = self;
+    } else {
+      g = this;
+    }
+    
+    f(g.jQuery);
+  }
+
+})(function ($) {
     'use strict';
 
     var AutoComplete = function (ed, options) {
@@ -13,7 +40,10 @@
             items: 10
         }, options);
 
+        this.options.insertFrom = this.options.insertFrom || this.options.queryBy;
+
         this.matcher = this.options.matcher || this.matcher;
+        this.sorter = this.options.sorter || this.sorter;
         this.renderDropdown = this.options.renderDropdown || this.renderDropdown;
         this.render = this.options.render || this.render;
         this.insert = this.options.insert || this.insert;
@@ -147,14 +177,14 @@
             }
         },
 
-        rteLostFocus: function (ed, e) {
+        rteLostFocus: function () {
             if (this.hasFocus) {
                 this.cleanUp(true);
             }
         },
 
         lookup: function () {
-            this.query = $.trim($(this.editor.getBody()).find("#autocomplete-searchtext").text()).replace('\ufeff', '');
+            this.query = $.trim($(this.editor.getBody()).find('#autocomplete-searchtext').text()).replace('\ufeff', '');
 
             if (this.$dropdown === undefined) {
                 this.show();
@@ -194,7 +224,7 @@
         },
 
         highlighter: function (text) {
-            return text.replace(new RegExp('(' + this.query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1") + ')', 'ig'), function ($1, match) {
+            return text.replace(new RegExp('(' + this.query.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
             });
         },
@@ -226,7 +256,7 @@
             items = items.slice(0, this.options.items);
 
             $.each(items, function (i, item) {
-                var $element = $(_this.render(item));
+                var $element = $(_this.render(item, i));
 
                 $element.html($element.html().replace($element.text(), _this.highlighter($element.text())));
 
@@ -248,7 +278,7 @@
             return '<ul class="rte-autocomplete dropdown-menu"><li class="loading"></li></ul>';
         },
 
-        render: function (item) {
+        render: function (item, index) {
             return '<li>' +
                         '<a href="javascript:;"><span>' + item[this.options.queryBy] + '</span></a>' +
                     '</li>';
@@ -282,11 +312,11 @@
             this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item) + '&nbsp;');
+            this.editor.execCommand('mceInsertContent', false, this.insert(item));
         },
 
         insert: function (item) {
-            return '<span>' + item[this.options.queryBy] + '</span>';
+            return '<span>' + item[this.options.insertFrom] + '</span>&nbsp;';
         },
 
         cleanUp: function (rollback) {
@@ -300,8 +330,13 @@
 
             if (rollback) {
                 var text = this.query,
-                    $selection = $(this.editor.dom.select('span#autocomplete')),
-                    replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
+                    $selection = $(this.editor.dom.select('span#autocomplete'));
+
+                if (!$selection.length) {
+                    return;
+                }
+                    
+                var replacement = $('<p>' + this.options.delimiter + text + '</p>')[0].firstChild,
                     focus = $(this.editor.selection.getNode()).offset().top === ($selection.offset().top + (($selection.outerHeight() - $selection.height()) / 2));
 
                 this.editor.dom.replace(replacement, $selection[0]);
@@ -337,7 +372,7 @@
 
     tinymce.create('tinymce.plugins.Mention', {
 
-        init: function (ed, url) {
+        init: function (ed) {
 
             var autoComplete,
                 autoCompleteData = ed.getParam('mentions');
@@ -349,7 +384,7 @@
             function prevCharIsSpace() {
                 var start = ed.selection.getRng(true).startOffset,
                       text = ed.selection.getRng(true).startContainer.data || '',
-                      charachter = text.substr(start - 1, 1);
+                      charachter = text.substr(start > 0 ? start - 1 : 0, 1);
 
                 return (!!$.trim(charachter).length) ? false : true;
             }
@@ -377,5 +412,5 @@
     });
 
     tinymce.PluginManager.add('mention', tinymce.plugins.Mention);
-
-})(tinymce, jQuery);
+  
+});
