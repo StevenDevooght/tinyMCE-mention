@@ -381,17 +381,26 @@
             // If the delimiter is a string value convert it to an array. (backwards compatibility)
             autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !$.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
 
-            function prevCharIsSpace() {
-                var start = ed.selection.getRng(true).startOffset,
-                      text = ed.selection.getRng(true).startContainer.data || '',
-                      charachter = text.substr(start > 0 ? start - 1 : 0, 1);
-
-                return (!!$.trim(charachter).length) ? false : true;
+            function canTriggerAutocomplete() {
+                var rng = ed.selection.getRng(true);
+  
+                // Allow autocomplete to be performed to replace the selected text (if any)
+                var hasSelectedText = rng.startOffset !== rng.endOffset;
+                if (hasSelectedText) {
+                    return true;
+                }
+  
+                // Allow autocomplete after whitespaces (if the preceding text can be trimmed to 0 length string)
+                var start = rng.startOffset,
+                    text = rng.startContainer.data || '',
+                    character = text.substr(start > 0 ? start - 1 : 0, 1);
+                var prevCharIsNotSpace = !!$.trim(character).length;
+                return !prevCharIsNotSpace;
             }
 
             ed.on('keypress', function (e) {
                 var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
-                if (delimiterIndex > -1 && prevCharIsSpace()) {
+                if (delimiterIndex > -1 && canTriggerAutocomplete()) {
                     if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
                         // Clone options object and set the used delimiter.
