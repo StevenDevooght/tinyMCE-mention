@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "tinymce-dist": "~4",
-    "jquery": "1.8.3"
+    "jquery": "~3"
   },
   "devDependencies": {
     "qunit": "~1.21.0"
