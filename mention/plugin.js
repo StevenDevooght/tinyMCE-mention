@@ -381,26 +381,34 @@
             // If the delimiter is a string value convert it to an array. (backwards compatibility)
             autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !$.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
 
-            function canTriggerAutocomplete() {
+            // if the trigger regex is undefined, the default value allows autocomplete after punctuation characters or whitespaces
+            autoCompleteData.triggerRegex = (autoCompleteData.triggerRegex !== undefined) ? typeof autoCompleteData.triggerRegex === 'string' ? new RegExp(autoCompleteData.triggerRegex, 'g') : autoCompleteData.triggerRegex : /[!"\#$%&'()*+,\-./:;<=>?\[\\\]^_`{|}~\s]{1}$/g;
+
+            // If the canTriggerAutocomplete method is undefined set the default method
+            autoCompleteData.canTriggerAutocomplete = (autoCompleteData.canTriggerAutocomplete !== undefined) ? autoCompleteData.canTriggerAutocomplete : function(ed) {
                 var rng = ed.selection.getRng(true);
-  
+
                 // Allow autocomplete to be performed to replace the selected text (if any)
                 var hasSelectedText = rng.startOffset !== rng.endOffset;
                 if (hasSelectedText) {
                     return true;
                 }
-  
-                // Allow autocomplete after whitespaces (if the preceding text can be trimmed to 0 length string)
-                var start = rng.startOffset,
-                    text = rng.startContainer.data || '',
-                    character = text.substr(start > 0 ? start - 1 : 0, 1);
-                var prevCharIsNotSpace = !!$.trim(character).length;
-                return !prevCharIsNotSpace;
+
+                // Allow autocomplete even when there are characters after the delimiter
+                if(rng.startOffset == 0) {
+                  return true;
+                }
+
+                // Allow autocomplete if the preceding text matches the trigger regex
+                var text = rng.startContainer.data || '';
+                var match = autoCompleteData.triggerRegex.test(text);
+                autoCompleteData.triggerRegex.lastIndex = 0; // Reset the index for the g flag (global match)
+                return match;
             }
 
             ed.on('keypress', function (e) {
                 var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);
-                if (delimiterIndex > -1 && canTriggerAutocomplete()) {
+                if (delimiterIndex > -1 && autoCompleteData.canTriggerAutocomplete(ed)) {
                     if (autoComplete === undefined || (autoComplete.hasFocus !== undefined && !autoComplete.hasFocus)) {
                         e.preventDefault();
                         // Clone options object and set the used delimiter.
