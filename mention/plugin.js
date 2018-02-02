@@ -395,7 +395,7 @@
                 }
 
                 // Allow autocomplete even when there are characters after the delimiter
-                if(rng.startOffset == 0) {
+                if(rng.startOffset === 0) {
                   return true;
                 }
 
@@ -404,7 +404,7 @@
                 var match = autoCompleteData.triggerRegex.test(text);
                 autoCompleteData.triggerRegex.lastIndex = 0; // Reset the index for the g flag (global match)
                 return match;
-            }
+            };
 
             ed.on('keypress', function (e) {
                 var delimiterIndex = $.inArray(String.fromCharCode(e.which || e.keyCode), autoCompleteData.delimiter);

@@ -169,6 +169,7 @@
 
             assert.equal(editor.getContent(), '<p>@ta</p>', 'Original text present.');
 
+            insertText(' ');
             pressDelimiter();
             insertText('ba');
 
@@ -179,7 +180,7 @@
 
                 editor.fire('click');
 
-                assert.equal(editor.getContent(), '<p>@ta@ba</p>', 'Original text present.');
+                assert.equal(editor.getContent(), '<p>@ta @ba</p>', 'Original text present.');
 
                 done2();
             }, 600);
