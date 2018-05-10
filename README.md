@@ -1,10 +1,6 @@
-# tinyMCE mention
+# tinymce-mention-jq
 
-[![Travis](https://travis-ci.org/StevenDevooght/tinyMCE-mention.svg?branch=master)](https://travis-ci.org/StevenDevooght/tinyMCE-mention)
-
-Mentions plugin for tinyMCE WYSIWYG editor.
-
-![preview](https://static.cognistreamer.com/mention-plugin/mention-4.0.0.png)
+Mentions plugin for TinyMCE v4+ WYSIWYG editor (no jQuery dependent).
 
 ## Browser compatibility
 
@@ -16,21 +12,11 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 
 ## Dependencies
 
-* [tinyMCE](http://www.tinymce.com/)
-* [jQuery](http://jquery.com/)
-
-> NOTE: Use v3.x if you're using tinyMCE v3.5.x, use v4.x if you're using tinyMCE v4.x
+* [TinyMCE](http://www.tinymce.com/)
 
 ## Usage
 
-Install using bower.
-
-```
-bower install tinymce-mention
-```
-
-Or copy the source of the plugin to the plugins directory of your tinyMCE installation.
-Add the mention plugin to your tinyMCE configuration.
+Add the mention plugin to your TinyMCE configuration.
 
 ```javascript
 plugins : "advlink, paste, mention",
@@ -70,7 +56,7 @@ source: [
 #### function
 
 ```javascript
-source: function (query, process, delimiter) {
+source: function(query, process, delimiter) {
     // Do your ajax call
     // When using multiple delimiters you can alter the query depending on the delimiter used
     if (delimiter === '@') {
