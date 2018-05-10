@@ -179,4 +179,5 @@ renderDropdown: function() {
 MIT licensed
 
 Copyright (C) 2013 Cognistreamer, [http://cognistreamer.com](http://cognistreamer.com)
+
 Forked from [StevenDevooght/tinyMCE-mention](https://github.com/StevenDevooght/tinyMCE-mention)

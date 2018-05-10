@@ -10,6 +10,6 @@
     "bugs": {
         "url": "https://github.com/BlueprintSys/tinymce-mention-nojq/issues"
     },
-    "main": "mention/plugin.js",
+    "main": "index.js",
     "license": "MIT"
 }
