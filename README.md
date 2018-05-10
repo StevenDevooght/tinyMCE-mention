@@ -1,4 +1,4 @@
-# tinymce-mention-jq
+# tinymce-mention-plugin
 
 Mentions plugin for TinyMCE v4+ WYSIWYG editor (no jQuery dependent).
 
@@ -179,3 +179,4 @@ renderDropdown: function() {
 MIT licensed
 
 Copyright (C) 2013 Cognistreamer, [http://cognistreamer.com](http://cognistreamer.com)
+Forked from [StevenDevooght/tinyMCE-mention](https://github.com/StevenDevooght/tinyMCE-mention)
