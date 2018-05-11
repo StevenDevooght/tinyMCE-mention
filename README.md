@@ -1,6 +1,7 @@
 # tinymce-mention-plugin
 
 Mentions plugin for TinyMCE v4+ WYSIWYG editor (no jQuery dependent).
+Original history for the file can be seen at https://github.com/BlueprintSys/novaWeb/blob/release-jumanji/libs/tinymce/plugins/tinymce-mention/plugin.js
 
 ## Browser compatibility
 
