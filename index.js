@@ -257,9 +257,7 @@
 
                 //BACKSPACE
                 case 8:
-                    if (this.query === '') {
-                        this.cleanUp(true);
-                    } else {
+                    if (this.query !== '') {
                         this.lookup();
                     }
                     break;
