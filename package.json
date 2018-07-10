@@ -3,7 +3,7 @@
     "version": "4.0.2",
     "repository": {
         "type": "git",
-        "url": "https://github.com/BlueprintSys/tinymce-mention-nojq"
+        "url": "https://github.com/BlueprintSys/tinymce-mention-plugin"
     },
     "description": "Mention/Autocomplete plugin for TinyMCE WYSIWYG editor (no jQuery dependent)",
     "author": "Steven Devooght",
