@@ -257,7 +257,9 @@
 
                 //BACKSPACE
                 case 8:
-                    if (this.query !== '') {
+                    if (this.query === '') {
+                        this.cleanUpDropDown()
+                    } else {
                         this.lookup();
                     }
                     break;
@@ -514,7 +516,15 @@
         insert: function (item) {
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
+        cleanUpDropDown: function () {
+            this.hasFocus = false;
 
+            if (this.dropdown !== undefined) {
+                this.dropdown.parentNode.removeChild(this.dropdown);
+
+                delete this.dropdown;
+            }
+        },
         cleanUp: function (rollback) {
             this.unbindEvents();
             this.hasFocus = false;
