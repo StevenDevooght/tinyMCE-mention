@@ -516,15 +516,15 @@
         insert: function (item) {
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
-        cleanUpDropDown: function () {
-            this.hasFocus = false;
 
+        cleanUpDropDown: function () {
             if (this.dropdown !== undefined) {
                 this.dropdown.parentNode.removeChild(this.dropdown);
 
                 delete this.dropdown;
             }
         },
+
         cleanUp: function (rollback) {
             this.unbindEvents();
             this.hasFocus = false;
