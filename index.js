@@ -258,7 +258,7 @@
                 //BACKSPACE
                 case 8:
                     if (this.query === '') {
-                        this.cleanUpDropDown(true)
+                        this.cleanUpWithDelimiter(true)
                     } else {
                         this.lookup();
                     }
@@ -345,7 +345,7 @@
             }
 
             this.query = this.jsH.trim(editorBody.innerText).replace('\ufeff', '');
-
+        
             if (this.dropdown === undefined) {
                 this.show();
             }
@@ -517,33 +517,10 @@
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
 
-        cleanUpDropDown: function (rollback) {
-            this.hasFocus = false;
-            if (this.dropdown !== undefined) {
-                this.dropdown.parentNode.removeChild(this.dropdown);
-
-                delete this.dropdown;
-            }
-            if (rollback) {
-                var text = this.query;
-                var selection = this.editor.dom.select('span#autocomplete')[0];
-
-                if (selection) {//is the tinymce editor still visible?
-                    var p = document.createElement('p');
-                    p.innerText = this.options.delimiter + text;
-                    var replacement = p.firstChild;
-                    var height = window.getComputedStyle(selection).getPropertyValue("height") === 'auto' ? selection.offsetHeight : window.getComputedStyle(selection).getPropertyValue("height");
-
-                    var focus = this.jsH.offset(this.editor.selection.getNode()).top === (this.jsH.offset(selection).top + ((selection.offsetHeight - height) / 2));
-
-                    this.editor.dom.replace(replacement, selection);
-
-                    if (focus) {
-                        this.editor.selection.select(replacement);
-                        this.editor.selection.collapse();
-                    }
-                }
-            }
+        cleanUpWithDelimiter: function (rollback) {
+         if (this.options.delimiter !== '@') {
+            cleanUp(rollback);
+         }
         },
 
         cleanUp: function (rollback) {
