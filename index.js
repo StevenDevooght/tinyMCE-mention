@@ -257,9 +257,7 @@
 
                 //BACKSPACE
                 case 8:
-                    if (this.query === '') {
-                        this.cleanUpWithDelimiter(true)
-                    } else {
+                    if (this.query !== '') {
                         this.lookup();
                     }
                     break;
@@ -515,12 +513,6 @@
 
         insert: function (item) {
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
-        },
-
-        cleanUpWithDelimiter: function (rollback) {
-         if (this.options.delimiter !== '@') {
-            cleanUp(rollback);
-         }
         },
 
         cleanUp: function (rollback) {
