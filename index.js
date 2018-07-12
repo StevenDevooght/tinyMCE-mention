@@ -257,9 +257,7 @@
 
                 //BACKSPACE
                 case 8:
-                    if (this.query === '') {
-                        this.cleanUp(true);
-                    } else {
+                    if (this.query !== '') {
                         this.lookup();
                     }
                     break;
@@ -345,7 +343,7 @@
             }
 
             this.query = this.jsH.trim(editorBody.innerText).replace('\ufeff', '');
-
+        
             if (this.dropdown === undefined) {
                 this.show();
             }
