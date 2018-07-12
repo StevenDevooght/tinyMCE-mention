@@ -519,7 +519,11 @@
 
         cleanUpDropDown: function (rollback) {
             this.hasFocus = false;
+            if (this.dropdown !== undefined) {
+                this.dropdown.parentNode.removeChild(this.dropdown);
 
+                delete this.dropdown;
+            }
             if (rollback) {
                 var text = this.query;
                 var selection = this.editor.dom.select('span#autocomplete')[0];
