@@ -257,8 +257,21 @@
 
                 //BACKSPACE
                 case 8:
-                    if (this.query !== '') {
-                        this.lookup();
+                    switch (this.query.length) {
+                        case 0: // The user has removed the delimiter as well
+                            this.cleanUp(true);
+                            break;
+                        case 1: // The user has removed everything except the delimiter. We need to remove some extra tags that TinyMce adds to keep the autocomplte working
+                            var caret = this.editor.dom.select('span#autocomplete span#_mce_caret')[0];
+                            var searchtext = this.editor.dom.select('span#autocomplete span#autocomplete-searchtext')[0];
+                            this.editor.dom.add(caret.parentElement, searchtext);
+                            this.editor.dom.remove(caret);
+
+                            this.editor.selection.select(this.editor.selection.dom.select('span#autocomplete-searchtext span')[0]);
+                            this.editor.selection.collapse(0);
+                            break;
+                        default:
+                            this.lookup();
                     }
                     break;
 
@@ -328,7 +341,6 @@
             }
         },
 
-
         rteLostFocus: function () {
             if (this.hasFocus) {
                 this.cleanUp(true);
@@ -343,7 +355,7 @@
             }
 
             this.query = this.jsH.trim(editorBody.innerText).replace('\ufeff', '');
-        
+
             if (this.dropdown === undefined) {
                 this.show();
             }
@@ -357,10 +369,10 @@
                 }
             }.bind(this), this.options.delay);
         },
+
         matcher: function (item) {
             return ~item[this.options.queryBy].toLowerCase().indexOf(this.query.toLowerCase());
         },
-
 
         sorter: function (items) {
             var beginswith = [],
@@ -452,7 +464,6 @@
             }
         },
 
-
         renderDropdown: function () {
             return '<ul class="rte-autocomplete tinymce-mention dropdown-menu"><li class="loading"></li></ul>'; //need to add a class starting with "mce-" to not make the inline editor disappear
         },
@@ -481,6 +492,7 @@
         highlightNextResult: function () {
             this.highlightResult(1);
         },
+
         highlightResult: function (direction) {
             var activeLi = this.dropdown.querySelector('li.active'),
                 items = Array.prototype.slice.call(this.dropdown.children),
