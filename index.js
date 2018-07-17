@@ -265,7 +265,7 @@
                             var caret = this.editor.dom.select('span#autocomplete span#_mce_caret')[0];
                             var searchtext = this.editor.dom.select('span#autocomplete span#autocomplete-searchtext')[0];
 
-                            if (carret && searchtext) {
+                            if (caret && searchtext) {
                                 this.editor.dom.add(caret.parentElement, searchtext);
                                 this.editor.dom.remove(caret);
                             }
