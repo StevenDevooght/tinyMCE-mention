@@ -1,6 +1,6 @@
 {
-    "name": "tinymce-mention-nojq",
-    "version": "4.0.3",
+    "name": "tinymce-mention-plugin",
+    "version": "4.0.4",
     "repository": {
         "type": "git",
         "url": "https://github.com/BlueprintSys/tinymce-mention-plugin"
@@ -8,7 +8,7 @@
     "description": "Mention/Autocomplete plugin for TinyMCE WYSIWYG editor (no jQuery dependent)",
     "author": "Steven Devooght",
     "bugs": {
-        "url": "https://github.com/BlueprintSys/tinymce-mention-nojq/issues"
+        "url": "https://github.com/BlueprintSys/tinymce-mention-plugin/issues"
     },
     "main": "index.js",
     "license": "MIT"
