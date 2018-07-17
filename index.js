@@ -264,8 +264,11 @@
                         case 1: // The user has removed everything except the delimiter. We need to remove some extra tags that TinyMce adds to keep the autocomplte working
                             var caret = this.editor.dom.select('span#autocomplete span#_mce_caret')[0];
                             var searchtext = this.editor.dom.select('span#autocomplete span#autocomplete-searchtext')[0];
-                            this.editor.dom.add(caret.parentElement, searchtext);
-                            this.editor.dom.remove(caret);
+
+                            if (caret && searchtext) {
+                                this.editor.dom.add(caret.parentElement, searchtext);
+                                this.editor.dom.remove(caret);
+                            }
 
                             this.editor.selection.select(this.editor.selection.dom.select('span#autocomplete-searchtext span')[0]);
                             this.editor.selection.collapse(0);
