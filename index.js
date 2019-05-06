@@ -193,6 +193,7 @@
         this.insert = this.options.insert || this.insert;
         this.highlighter = this.options.highlighter || this.highlighter;
         this.areEmailDiscussionsEnabled = this.options.areEmailDiscussionsEnabled;
+        this.areGlossaryReferencesEnabled = this.options.areGlossaryReferencesEnabled;
 
         this.query = '';
         this.hasFocus = true;
@@ -444,8 +445,10 @@
             items = _this.sorter(items);
 
             items = items.slice(0, this.options.items);
-            if (!_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
+            if (_this.options.delimiter === '@' && !_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
                 items.push({ id: "PlaceHolderEntry", name: "EmailDiscussionDisabled", email: "EmailDiscussionDisabled" });
+            } else if (_this.options.delimiter === '#' && !_this.areGlossaryReferencesEnabled) { //this is needed for the warning message we display in the dropdown when glossary references are disabled.
+                items.push({ id: "PlaceHolderEntry", term: "GlossaryReferencesDisabled", definition: "GlossaryReferencesDisabled" });
             }
             this.dropdown.innerHTML = '';
 
@@ -619,7 +622,7 @@
 
             // If the delimiter is undefined set default value to ['@'].
             // If the delimiter is a string value convert it to an array. (backwards compatibility)
-            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !Array.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
+            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !Array.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@', '#'];
 
             function prevCharIsSpace() {
                 var start = ed.selection.getRng(true).startOffset,
