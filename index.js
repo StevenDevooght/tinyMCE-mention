@@ -193,7 +193,6 @@
         this.insert = this.options.insert || this.insert;
         this.highlighter = this.options.highlighter || this.highlighter;
         this.areEmailDiscussionsEnabled = this.options.areEmailDiscussionsEnabled;
-        this.areGlossaryReferencesEnabled = this.options.areGlossaryReferencesEnabled;
 
         this.query = '';
         this.hasFocus = true;
@@ -354,7 +353,8 @@
         lookup: function () {
             var editorBody = this.editor.getBody().querySelector('#autocomplete-searchtext');
 
-            if (!editorBody || !editorBody.innerText) {
+            if (!editorBody || !editorBody.innerText || (this.options.delimiter === '#' &&
+                this.editor.container.closest('comment'))) {
                 return ;
             }
 
@@ -447,8 +447,6 @@
             items = items.slice(0, this.options.items);
             if (_this.options.delimiter === '@' && !_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
                 items.push({ id: "PlaceHolderEntry", name: "EmailDiscussionDisabled", email: "EmailDiscussionDisabled" });
-            } else if (_this.options.delimiter === '#' && !_this.areGlossaryReferencesEnabled) { //this is needed for the warning message we display in the dropdown when glossary references are disabled.
-                items.push({ id: "PlaceHolderEntry", term: "GlossaryReferencesDisabled", definition: "GlossaryReferencesDisabled" });
             }
             this.dropdown.innerHTML = '';
 
