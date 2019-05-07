@@ -353,8 +353,7 @@
         lookup: function () {
             var editorBody = this.editor.getBody().querySelector('#autocomplete-searchtext');
 
-            if (!editorBody || !editorBody.innerText || (this.options.delimiter === '#' &&
-                this.editor.container.closest('comment'))) {
+            if (!editorBody || !editorBody.innerText) {
                 return ;
             }
 
@@ -620,7 +619,7 @@
 
             // If the delimiter is undefined set default value to ['@'].
             // If the delimiter is a string value convert it to an array. (backwards compatibility)
-            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !Array.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@', '#'];
+            autoCompleteData.delimiter = (autoCompleteData.delimiter !== undefined) ? !Array.isArray(autoCompleteData.delimiter) ? [autoCompleteData.delimiter] : autoCompleteData.delimiter : ['@'];
 
             function prevCharIsSpace() {
                 var start = ed.selection.getRng(true).startOffset,
