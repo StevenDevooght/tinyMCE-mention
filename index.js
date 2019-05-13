@@ -446,6 +446,8 @@
             items = items.slice(0, this.options.items);
             if (_this.options.delimiter === '@' && !_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
                 items.push({ id: "PlaceHolderEntry", name: "EmailDiscussionDisabled", email: "EmailDiscussionDisabled" });
+            } else if (_this.options.delimiter === '#' && items.length === 0) {
+                items.push({ termId: "PlaceHolderEntry", termName: "NoResultsFound" });
             }
             this.dropdown.innerHTML = '';
 
