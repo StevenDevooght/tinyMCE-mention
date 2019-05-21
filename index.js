@@ -296,6 +296,24 @@
                     this.cleanUp(true);
                     break;
 
+                //SPACE
+                case 32:
+                    // First character after delimiter is a space
+                    const editorBody = this.editor.getBody().querySelector('#autocomplete-searchtext');
+
+                    if (!editorBody || !editorBody.innerText) {
+                        break;
+                    }
+
+                    const innerText = editorBody.innerText.replace('\ufeff', '');
+
+                    // SPACE (32) is automatically replaced by NO-BREAK SPACE (160)
+                    if (innerText.length === 1 && innerText.charCodeAt(0) == 160) {
+                        this.query = '';
+                        this.cleanUp(true);
+                    }
+                    break;
+
                 default:
                     this.lookup();
             }
