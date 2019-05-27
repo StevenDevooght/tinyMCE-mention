@@ -272,6 +272,7 @@
 
                             this.editor.selection.select(this.editor.selection.dom.select('span#autocomplete-searchtext span')[0]);
                             this.editor.selection.collapse(0);
+                            this.lookup();
                             break;
                         default:
                             this.lookup();
