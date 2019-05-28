@@ -283,7 +283,7 @@
                 case 9:
                 //ENTER
                 case 13:
-                    var item = (this.dropdown !== undefined) ? this.dropdown.querySelectorAll('li.active') : [];
+                    var item = (this.dropdown !== undefined) ? (this.options.delimiter === '@') ? this.dropdown.querySelectorAll('li.active') : this.dropdown.firstChild.querySelectorAll('li.active') : [];
                     if (item.length) {
                         this.select(this.jsH.getAllDataAttributes(item[0]));
                         this.cleanUp(false);
@@ -430,16 +430,36 @@
             if (offset.top !== null) {
                 this.dropdown.style.top = offset.top + "px";
                 this.dropdown.style.bottom = "auto";
+
+                if (this.options.delimiter === '#') {
+                    this.dropdown.firstChild.style.top = "-4px";
+                    this.dropdown.firstChild.style.bottom = "auto";
+                }
             } else {
                 this.dropdown.style.top = "auto";
                 this.dropdown.style.bottom = offset.bottom + "px";
+
+                if (this.options.delimiter === '#') {
+                    this.dropdown.firstChild.style.top = "auto";
+                    this.dropdown.firstChild.style.bottom = "-2px";
+                }
             }
             if (offset.left !== null) {
                 this.dropdown.style.left = offset.left + "px";
                 this.dropdown.style.right = "auto";
+
+                if (this.options.delimiter === '#') {
+                    this.dropdown.firstChild.style.left = "0px";
+                    this.dropdown.firstChild.style.right = "auto";
+                }
             } else {
                 this.dropdown.style.left = "auto";
                 this.dropdown.style.right = offset.right + "px";
+
+                if (this.options.delimiter === '#') {
+                    this.dropdown.firstChild.style.left = "auto";
+                    this.dropdown.firstChild.style.right = "0px";
+                }
             }
             this.dropdown.classList.add("arrow-" + offset.arrow.horizontal);
             this.dropdown.classList.add("arrow-" + offset.arrow.vertical);
@@ -468,7 +488,9 @@
             } else if (_this.options.delimiter === '#' && items.length === 0) {
                 items.push({ termId: "PlaceHolderEntry", termName: "NoResultsFound" });
             }
-            this.dropdown.innerHTML = '';
+
+            const dropdown = (_this.options.delimiter === '@') ? this.dropdown : this.dropdown.firstChild;
+            dropdown.innerHTML = '';
 
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
@@ -478,18 +500,22 @@
                 this.jsH.each(item, function (key, val) {
                     li.setAttribute('data-' + key, val);
                 });
-                this.dropdown.appendChild(li);
+                dropdown.appendChild(li);
             }
 
-            if (this.dropdown.childNodes.length > 0) {
-                this.dropdown.style.display = 'block';
+            if (dropdown.childNodes.length > 0) {
+                dropdown.style.display = 'block';
             } else {
-                this.dropdown.style.display = 'none';
+                dropdown.style.display = 'none';
             }
         },
 
         renderDropdown: function () {
+            if (this.options.delimiter === '@') {
             return '<ul class="rte-autocomplete tinymce-mention dropdown-menu"><li class="loading"></li></ul>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+            } else if (this.options.delimiter === '#') {
+                return '<div class="rte-autocomplete tinymce-glossary-reference"><ul class="tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+            }
         },
 
         render: function (item) {
@@ -518,8 +544,10 @@
         },
 
         highlightResult: function (direction) {
-            var activeLi = this.dropdown.querySelector('li.active'),
-                items = Array.prototype.slice.call(this.dropdown.children),
+            const dropdown = (this.options.delimiter === '@') ? this.dropdown : this.dropdown.firstChild;
+
+            var activeLi = dropdown.querySelector('li.active'),
+                items = Array.prototype.slice.call(dropdown.children),
                 length = items.length,
                 currentIndex = 0,
                 index = 0;
@@ -532,7 +560,7 @@
                 index = (currentIndex === length - 1) ? 0 : ++currentIndex;
             }
 
-            var liArray = this.dropdown.querySelectorAll('li');
+            var liArray = dropdown.querySelectorAll('li');
             for (var i = 0; i < liArray.length; i++) {
                 this.jsH.removeClass(liArray[i], 'active');
             }
