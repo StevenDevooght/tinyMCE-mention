@@ -482,11 +482,11 @@
 
             items = _this.sorter(items);
 
-            items = items.slice(0, this.options.items);
+            items = items.slice(0, (_this.options.delimiter === '@') ? this.options.items : this.options.maxGlossaryItems);
             if (_this.options.delimiter === '@' && !_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
                 items.push({ id: "PlaceHolderEntry", name: "EmailDiscussionDisabled", email: "EmailDiscussionDisabled" });
             } else if (_this.options.delimiter === '#' && items.length === 0) {
-                items.push({ termId: "PlaceHolderEntry", termName: "NoResultsFound" });
+                items.push({ termId: -1, termName: "NoResultsFound" });
             }
 
             const dropdown = (_this.options.delimiter === '@') ? this.dropdown : this.dropdown.firstChild;
