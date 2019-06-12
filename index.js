@@ -308,8 +308,8 @@
 
                     const innerText = editorBody.innerText.replace('\ufeff', '');
 
-                    // SPACE (32) is automatically replaced by NO-BREAK SPACE (160)
-                    if (innerText.length === 1 && innerText.charCodeAt(0) == 160) {
+                    // SPACE (32) is automatically replaced by NO-BREAK SPACE (160) in Chrome
+                    if (innerText.length === 1 && (innerText.charCodeAt(0) == 160 || innerText.charCodeAt(0) == 32)) {
                         this.query = '';
                         this.cleanUp(true);
                     }
