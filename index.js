@@ -568,6 +568,24 @@
             }
 
             this.jsH.addClass(items[index], 'active');
+            this.keepHighlightedItemInView(items[index]);
+        },
+
+        keepHighlightedItemInView: function (item) {
+            var dropdown = (this.options.delimiter === '@') ? this.dropdown : this.dropdown.firstChild;
+            var dropdownTop = dropdown.scrollTop;
+            var dropdownBottom = dropdownTop + dropdown.clientHeight;
+
+            //Determine item top and bottom
+            var itemTop = item.offsetTop;
+            var itemBottom = itemTop + item.clientHeight;
+
+            //Check if out of view
+            if (itemTop < dropdownTop) {
+                dropdown.scrollTop -= (dropdownTop - itemTop);
+            } else if (itemBottom > dropdownBottom) {
+                dropdown.scrollTop += (itemBottom - dropdownBottom);
+            }
         },
 
         select: function (item) {
