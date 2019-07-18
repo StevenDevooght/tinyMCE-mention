@@ -373,6 +373,7 @@
             var editorBody = this.editor.getBody().querySelector('#autocomplete-searchtext');
 
             if (!editorBody || !editorBody.innerText) {
+                this.cleanUp(false);
                 return ;
             }
 
