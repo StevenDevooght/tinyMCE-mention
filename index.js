@@ -377,6 +377,12 @@
                 return ;
             }
 
+            var delimiter = this.editor.getBody().querySelector('#autocomplete-delimiter');
+            if (!delimiter || !delimiter.innerText || delimiter.innerText !== this.options.delimiter) {
+                this.cleanUp(true, true);
+                return ;                
+            }
+
             this.query = this.jsH.trim(editorBody.innerText).replace('\ufeff', '');
 
             if (this.dropdown === undefined) {
@@ -600,7 +606,7 @@
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
 
-        cleanUp: function (rollback) {
+        cleanUp: function (rollback, delimiterDeleted = false) {
             this.unbindEvents();
             this.hasFocus = false;
 
@@ -616,7 +622,7 @@
 
                 if (selection) {//is the tinymce editor still visible?
                     var p = document.createElement('p');
-                    p.innerText = this.options.delimiter + text;
+                    p.innerText = (delimiterDeleted) ? text : this.options.delimiter + text;
                     var replacement = p.firstChild;
                     var height = window.getComputedStyle(selection).getPropertyValue("height") === 'auto' ? selection.offsetHeight : window.getComputedStyle(selection).getPropertyValue("height");
 
