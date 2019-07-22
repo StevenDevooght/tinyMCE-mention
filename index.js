@@ -225,7 +225,7 @@
 
             document.body.addEventListener('click', this.bodyClickProxy = this.rteLostFocus.bind(this));
 
-            this.editor.getWin().addEventListener('scroll', this.rteScroll = function () { this.cleanUp(true); }.bind(this));
+            this.editor.getWin().addEventListener('scroll', this.rteScroll = function () { this.cleanUp(true, false); }.bind(this));
         },
 
         unbindEvents: function () {
@@ -259,7 +259,7 @@
                 case 8:
                     switch (this.query.length) {
                         case 0: // The user has removed the delimiter as well
-                            this.cleanUp(true);
+                            this.cleanUp(true, false);
                             break;
                         case 1: // The user has removed everything except the delimiter. We need to remove some extra tags that TinyMce adds to keep the autocomplte working
                             var caret = this.editor.dom.select('span#autocomplete span#_mce_caret')[0];
@@ -286,15 +286,15 @@
                     var item = (this.dropdown !== undefined) ? (this.options.delimiter === '@') ? this.dropdown.querySelectorAll('li.active') : this.dropdown.firstChild.querySelectorAll('li.active') : [];
                     if (item.length) {
                         this.select(this.jsH.getAllDataAttributes(item[0]));
-                        this.cleanUp(false);
+                        this.cleanUp(false, false);
                     } else {
-                        this.cleanUp(true);
+                        this.cleanUp(true, false);
                     }
                     break;
 
                 //ESC
                 case 27:
-                    this.cleanUp(true);
+                    this.cleanUp(true, false);
                     break;
 
                 //SPACE
@@ -311,7 +311,7 @@
                     // SPACE (32) is automatically replaced by NO-BREAK SPACE (160) in Chrome
                     if (innerText.length === 1 && (innerText.charCodeAt(0) == 160 || innerText.charCodeAt(0) == 32)) {
                         this.query = '';
-                        this.cleanUp(true);
+                        this.cleanUp(true, false);
                     }
                     break;
 
@@ -359,13 +359,13 @@
             }
 
             if (this.hasFocus && id !== 'autocomplete-searchtext') {
-                this.cleanUp(true);
+                this.cleanUp(true, false);
             }
         },
 
         rteLostFocus: function () {
             if (this.hasFocus) {
-                this.cleanUp(true);
+                this.cleanUp(true, false);
             }
         },
 
@@ -373,7 +373,7 @@
             var editorBody = this.editor.getBody().querySelector('#autocomplete-searchtext');
 
             if (!editorBody || !editorBody.innerText) {
-                this.cleanUp(false);
+                this.cleanUp(false, false);
                 return ;
             }
 
@@ -538,7 +538,7 @@
 
             if (!this.jsH.isEmptyObject(item)) {
                 this.select(item);
-                this.cleanUp(false);
+                this.cleanUp(false, false);
             }
             e.stopPropagation();
             e.preventDefault();
@@ -606,7 +606,7 @@
             return '<span>' + item[this.options.queryBy] + '</span>&nbsp;';
         },
 
-        cleanUp: function (rollback, delimiterDeleted = false) {
+        cleanUp: function (rollback, delimiterDeleted) {
             this.unbindEvents();
             this.hasFocus = false;
 
