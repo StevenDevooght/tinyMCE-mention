@@ -428,6 +428,7 @@
             });
         },
 
+        // TODO: Will update dropdown look in STOR-19376 once search component dropdown completed
         show: function () {
             var offset = this.editor.inline ? this.offsetInline() : this.offset();
 
@@ -438,7 +439,7 @@
                 this.dropdown.style.top = offset.top + "px";
                 this.dropdown.style.bottom = "auto";
 
-                if (this.options.delimiter === '^') {
+                if (this.options.delimiter !== '@') {
                     this.dropdown.firstChild.style.top = "-4px";
                     this.dropdown.firstChild.style.bottom = "auto";
                 }
@@ -446,7 +447,7 @@
                 this.dropdown.style.top = "auto";
                 this.dropdown.style.bottom = offset.bottom + "px";
 
-                if (this.options.delimiter === '^') {
+                if (this.options.delimiter !== '@') {
                     this.dropdown.firstChild.style.top = "auto";
                     this.dropdown.firstChild.style.bottom = "-2px";
                 }
@@ -455,7 +456,7 @@
                 this.dropdown.style.left = offset.left + "px";
                 this.dropdown.style.right = "auto";
 
-                if (this.options.delimiter === '^') {
+                if (this.options.delimiter !== '@') {
                     this.dropdown.firstChild.style.left = "0px";
                     this.dropdown.firstChild.style.right = "auto";
                 }
@@ -463,7 +464,7 @@
                 this.dropdown.style.left = "auto";
                 this.dropdown.style.right = offset.right + "px";
 
-                if (this.options.delimiter === '^') {
+                if (this.options.delimiter !== '@') {
                     this.dropdown.firstChild.style.left = "auto";
                     this.dropdown.firstChild.style.right = "0px";
                 }
@@ -494,7 +495,7 @@
             }
             if (_this.options.delimiter === '@' && !_this.areEmailDiscussionsEnabled) { //this is needed for the warning message we display in the dropdown when email discussions are disabled.
                 items.push({ id: "PlaceHolderEntry", name: "EmailDiscussionDisabled", email: "EmailDiscussionDisabled" });
-            } else if (_this.options.delimiter === '^' && items.length === 0) {
+            } else if (_this.options.delimiter !== '@' && items.length === 0) {
                 items.push({ termId: -1, termName: "NoResultsFound" });
             }
 
@@ -524,6 +525,9 @@
             return '<ul class="rte-autocomplete tinymce-mention dropdown-menu"><li class="loading"></li></ul>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             } else if (this.options.delimiter === '^') {
                 return '<div class="rte-autocomplete tinymce-glossary-reference"><ul class="tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+            } else if (this.options.delimiter === '#') {
+                // TODO: Will update dropdown look in STOR-19376 once search component dropdown completed
+                return '<div class="rte-autocomplete tinymce-inline-trace"><ul class="tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             }
         },
 
