@@ -197,6 +197,8 @@
         this.query = '';
         this.hasFocus = true;
 
+        this.cleanUpEditor();
+
         this.renderInput();
 
         this.bindEvents();
@@ -638,6 +640,28 @@
                         this.editor.selection.select(replacement);
                         this.editor.selection.collapse();
                     }
+                }
+            }
+        },
+
+        cleanUpEditor() {
+            var selection = this.editor.dom.select('span#autocomplete')[0];
+
+            if (selection) {//is the tinymce editor still visible?
+                var p = document.createElement('p');
+                var delimiter = selection.firstChild.innerText;
+                var text = selection.lastChild.innerText;
+                p.innerText = delimiter + text;
+                var replacement = p.firstChild;
+                var height = window.getComputedStyle(selection).getPropertyValue("height") === 'auto' ? selection.offsetHeight : window.getComputedStyle(selection).getPropertyValue("height");
+
+                var focus = this.jsH.offset(this.editor.selection.getNode()).top === (this.jsH.offset(selection).top + ((selection.offsetHeight - height) / 2));
+
+                this.editor.dom.replace(replacement, selection);
+
+                if (focus) {
+                    this.editor.selection.select(replacement);
+                    this.editor.selection.collapse();
                 }
             }
         },
