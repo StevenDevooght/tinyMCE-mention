@@ -644,7 +644,7 @@
             }
         },
 
-        cleanUpEditor() {
+        cleanUpEditor: function () {
             var selection = this.editor.dom.select('span#autocomplete')[0];
 
             if (selection) {//is the tinymce editor still visible?
