@@ -192,6 +192,8 @@
         this.render = this.options.render || this.render;
         this.insert = this.options.insert || this.insert;
         this.highlighter = this.options.highlighter || this.highlighter;
+        this.onSearchAllProjectsClicked = this.options.onSearchAllProjectsClicked;
+        this.onDropdownClose = this.options.onDropdownClose;
         this.areEmailDiscussionsEnabled = this.options.areEmailDiscussionsEnabled;
 
         this.query = '';
@@ -382,7 +384,7 @@
             var delimiter = this.editor.getBody().querySelector('#autocomplete-delimiter');
             if (!delimiter || !delimiter.innerText || delimiter.innerText !== this.options.delimiter) {
                 this.cleanUp(true, true);
-                return ;                
+                return ;
             }
 
             this.query = this.jsH.trim(editorBody.innerText).replace('\ufeff', '');
@@ -479,7 +481,7 @@
             this.dropdown.addEventListener('click', this.autoCompleteClick.bind(this));
         },
 
-        process: function (data) {
+        process: function (data, isFullSearch, keepTyping) {
             if (!this.hasFocus) {
                 return;
             }
@@ -501,6 +503,10 @@
                 items.push({ termId: -1, termName: "NoResultsFound" });
             } else if (_this.options.delimiter === '#' && items.length === 0) {
                 items.push({ itemId: -1, name: "NoResultsFound" });
+            } else if (_this.options.delimiter === '#' && keepTyping) {
+                items.push({ itemId: -3, name: "KeepTyping" });
+            } else if (_this.options.delimiter === '#' && !isFullSearch) {
+                items.push({ itemId: -2, name: "SearchAllProjects" });
             }
 
             const dropdown = (_this.options.delimiter === '@') ? this.dropdown : this.dropdown.firstChild;
@@ -542,14 +548,21 @@
         },
 
         autoCompleteClick: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            if (e.target.className === "tinymce-inline-trace__show-all") {
+                this.onSearchAllProjectsClicked();
+                this.editor.focus();
+                return;
+            }
+
             var item = this.jsH.getAllDataAttributes(this.jsH.closest(e.target, 'li'));
 
             if (!this.jsH.isEmptyObject(item)) {
                 this.select(item);
                 this.cleanUp(false, false);
             }
-            e.stopPropagation();
-            e.preventDefault();
         },
 
         highlightPreviousResult: function () {
@@ -617,6 +630,7 @@
         cleanUp: function (rollback, delimiterDeleted) {
             this.unbindEvents();
             this.hasFocus = false;
+            this.onDropdownClose();
 
             if (this.dropdown !== undefined) {
                 this.dropdown.parentNode.removeChild(this.dropdown);
