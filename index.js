@@ -503,6 +503,9 @@
                 items.push({ termId: -1, termName: "NoResultsFound" });
             } else if (_this.options.delimiter === '#' && items.length === 0) {
                 items.push({ itemId: -1, name: "NoResultsFound" });
+                if (!isFullSearch) {
+                    items.push({ itemId: -2, name: "SearchAllProjects" });
+                }
             } else if (_this.options.delimiter === '#' && keepTyping) {
                 items.push({ itemId: -3, name: "KeepTyping" });
             } else if (_this.options.delimiter === '#' && !isFullSearch) {
