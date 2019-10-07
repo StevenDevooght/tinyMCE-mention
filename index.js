@@ -195,6 +195,7 @@
         this.onSearchAllProjectsClicked = this.options.onSearchAllProjectsClicked;
         this.onDropdownClose = this.options.onDropdownClose;
         this.areEmailDiscussionsEnabled = this.options.areEmailDiscussionsEnabled;
+        this.sorter = this.options.sorter || this.sorter;
 
         this.query = '';
         this.hasFocus = true;
