@@ -199,6 +199,9 @@
 
         this.query = '';
         this.hasFocus = true;
+        this.artifactDropdownClassName = 'tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu';
+        this.glossaryDropdownClassName = 'tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu';
+        this.mentionDropdownClassName = 'rte-autocomplete tinymce-mention dropdown-menu';
 
         this.cleanUpEditor();
 
@@ -230,12 +233,14 @@
 
             document.body.addEventListener('click', this.bodyClickProxy = this.rteLostFocus.bind(this));
             document.addEventListener('scroll', this.rteScroll = function (e) {
-                if(e.target.className !== 'tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu') {
-                    this.cleanUp(true, false);
+                if(e.target.className !== this.artifactDropdownClassName &&
+                   e.target.className !== this.glossaryDropdownClassName &&
+                   e.target.className !== this.mentionDropdownClassName) {
+                    this.cleanUp(false, false);
                 }
             }.bind(this), true);
             window.addEventListener('resize', this.rteResize = function (e) {
-                this.cleanUp(true, false);
+                this.cleanUp(false, false);
             }.bind(this), true);
         },
 
@@ -539,12 +544,12 @@
 
         renderDropdown: function () {
             if (this.options.delimiter === '@') {
-            return '<ul class="rte-autocomplete tinymce-mention dropdown-menu"><li class="loading"></li></ul>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+            return '<ul tabindex="0" class="' + this.mentionDropdownClassName + '"><li class="loading"></li></ul>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             } else if (this.options.delimiter === '^') {
-                return '<div class="rte-autocomplete tinymce-glossary-reference"><ul class="tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+                return '<div tabindex="0" class="rte-autocomplete tinymce-glossary-reference"><ul class="' + this.glossaryDropdownClassName + '"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             } else if (this.options.delimiter === '#') {
                 // TODO: Will update dropdown look in STOR-19376 once search component dropdown completed
-                return '<div tabindex="0" class="rte-autocomplete tinymce-inline-trace"><ul class="tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+                return '<div tabindex="0" class="rte-autocomplete tinymce-inline-trace"><ul class="' + this.artifactDropdownClassName + '"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             }
         },
 
