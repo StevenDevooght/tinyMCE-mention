@@ -251,7 +251,7 @@
 
             document.body.removeEventListener('click', this.bodyClickProxy);
             document.removeEventListener('scroll', this.rteScroll);
-            document.removeEventListener('resize', this.rteResize);
+            window.removeEventListener('resize', this.rteResize);
         },
 
         rteKeyUp: function (e) {
