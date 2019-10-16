@@ -229,8 +229,14 @@
             this.editor.on('click', this.editorClickProxy = this.rteClicked.bind(this));
 
             document.body.addEventListener('click', this.bodyClickProxy = this.rteLostFocus.bind(this));
-
-            this.editor.getWin().addEventListener('scroll', this.rteScroll = function () { this.cleanUp(true, false); }.bind(this));
+            document.addEventListener('scroll', this.rteScroll = function (e) {
+                if(e.target.className !== 'tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu') {
+                    this.cleanUp(true, false);
+                }
+            }.bind(this), true);
+            window.addEventListener('resize', this.rteResize = function (e) {
+                this.cleanUp(true, false);
+            }.bind(this), true);
         },
 
         unbindEvents: function () {
@@ -239,11 +245,8 @@
             this.editor.off('click', this.editorClickProxy);
 
             document.body.removeEventListener('click', this.bodyClickProxy);
-
-            var editorWindow = this.editor.getWin();
-            if (editorWindow) { //is the editor still visible?
-                editorWindow.removeEventListener('scroll', this.rteScroll);
-            }
+            document.removeEventListener('scroll', this.rteScroll);
+            document.removeEventListener('resize', this.rteResize);
         },
 
         rteKeyUp: function (e) {
