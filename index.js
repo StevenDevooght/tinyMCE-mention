@@ -541,7 +541,7 @@
                 return '<div class="rte-autocomplete tinymce-glossary-reference"><ul class="tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             } else if (this.options.delimiter === '#') {
                 // TODO: Will update dropdown look in STOR-19376 once search component dropdown completed
-                return '<div class="rte-autocomplete tinymce-inline-trace"><ul class="tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
+                return '<div tabindex="0" class="rte-autocomplete tinymce-inline-trace"><ul class="tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu"><li class="loading"></li></ul></div>'; //need to add a class starting with "mce-" to not make the inline editor disappear
             }
         },
 
