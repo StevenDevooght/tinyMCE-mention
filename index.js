@@ -202,6 +202,7 @@
         this.artifactDropdownClassName = 'tinymce-inline-trace tinymce-inline-trace__dropdown dropdown-menu';
         this.glossaryDropdownClassName = 'tinymce-glossary-reference tinymce-glossary-reference__dropdown dropdown-menu';
         this.mentionDropdownClassName = 'rte-autocomplete tinymce-mention dropdown-menu';
+        this.editorClassName = 'tinymce-editor__editor mce-content-body mce-edit-focus';
 
         this.cleanUpEditor();
 
@@ -235,7 +236,8 @@
             document.addEventListener('scroll', this.rteScroll = function (e) {
                 if(e.target.className !== this.artifactDropdownClassName &&
                    e.target.className !== this.glossaryDropdownClassName &&
-                   e.target.className !== this.mentionDropdownClassName) {
+                   e.target.className !== this.mentionDropdownClassName &&
+                   e.target.className !== this.editorClassName) {
                     this.cleanUp(false, false);
                 }
             }.bind(this), true);
