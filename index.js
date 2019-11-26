@@ -662,7 +662,8 @@
                     var replacement = p.firstChild;
                     var height = window.getComputedStyle(selection).getPropertyValue("height") === 'auto' ? selection.offsetHeight : window.getComputedStyle(selection).getPropertyValue("height");
 
-                    var focus = this.jsH.offset(this.editor.selection.getNode()).top === (this.jsH.offset(selection).top + ((selection.offsetHeight - height) / 2));
+                    var focus = !!this.editor.selection && 
+                                (this.jsH.offset(this.editor.selection.getNode()).top === (this.jsH.offset(selection).top + ((selection.offsetHeight - height) / 2)));
 
                     this.editor.dom.replace(replacement, selection);
 
