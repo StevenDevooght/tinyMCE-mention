@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery/jquery.min.js"></script>
+    <script src="tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="tinymce-jquery/tinymce-jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <style>
+        .mentions-loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: mentions-loader-spin 2s linear infinite;
+        }
+
+        @keyframes mentions-loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <div>
+        <textarea id="tiny"></textarea>
+    </div>
+
+    <script>
+        $('textarea#tiny').tinymce({
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'emoticons', 'mention'
+            ],
+            mentions: {
+                source: function (query, process, delimiter) {
+                    if (delimiter === '@') {
+                        $.getJSON('https://jsonplaceholder.typicode.com/users', function (data) {
+                            process(data)
+                        });
+                    }
+                },
+                queryBy: 'name',
+                delimiter: '@',
+                mentioned_style: 'background-color: antiquewhite;padding: 2px;border-radius: 5px;',
+                // loading_text: '',
+                // loading_class: 'mentions-loader',
+                insert: function (item) {
+                    return '<span class="test" contenteditable="false" style="' + this.options.mentioned_style + '">' + item.name + '</span>&nbsp;';
+                },
+            },
+            toolbar: 'undo redo | blocks | bold italic backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help | emoticons'
+        });
+    </script>
+</body>
+</html>

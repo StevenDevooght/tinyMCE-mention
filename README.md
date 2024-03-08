@@ -4,7 +4,7 @@
 
 Mentions plugin for tinyMCE WYSIWYG editor.
 
-![preview](https://static.cognistreamer.com/mention-plugin/mention-4.0.0.png)
+![preview](preview.png)
 
 ## Browser compatibility
 
@@ -18,8 +18,15 @@ Mentions plugin for tinyMCE WYSIWYG editor.
 
 * [tinyMCE](http://www.tinymce.com/)
 * [jQuery](http://jquery.com/)
+* [Bootstrap](https://getbootstrap.com/) *(for dropdown selection only)*
 
-> NOTE: Use v3.x if you're using tinyMCE v3.5.x, use v4.x if you're using tinyMCE v4.x
+## Compatibility
+* Now compatible with **TinyMCE v6.x**
+* It will **not work** with other versions of TinyMCE
+
+## Demo
+* Clone this repo and open `/examples/TinyMCEv6.8.3/index.html`
+> NOTE: This is only my **custom implementation**, feel free to use it as a reference
 
 ## Usage
 
@@ -187,6 +194,12 @@ renderDropdown: function() {
     return '<ul class="rte-autocomplete dropdown-menu"></ul>';
 }
 ```
+
+### mentioned_style
+
+Set your style to mentioned item
+
+**Default**: `background-color: antiquewhite;padding: 2px;border-radius: 5px;`
 
 ## License
 
