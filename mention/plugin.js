@@ -313,7 +313,15 @@
             this.editor.focus();
             var selection = this.editor.dom.select('span#autocomplete')[0];
             this.editor.dom.remove(selection);
-            this.editor.execCommand('mceInsertContent', false, this.insert(item));
+
+            //GET THE INSERT CONTENT
+            var insertContent = this.insert(item);
+
+            //IF THE INSERT CONTENT ISNT A PROMIS INSERTT AS NORMAL
+            if(!insertContent instanceof Promise) this.editor.execCommand('mceInsertContent', false, insertContent);
+
+            //THE INSERT CONTENT IS A PROMISE
+            else insertContent.then((data) => this.editor.execCommand('mceInsertContent', false, data));
         },
 
         insert: function (item) {
